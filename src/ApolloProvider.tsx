@@ -8,7 +8,8 @@ import {
 import { onError } from "@apollo/client/link/error";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:5000/graphql", // Replace with your GraphQL server endpoint
+  uri: "https://dbl-server-one.vercel.app/graphql", // Replace with your GraphQL server endpoint
+  // uri: "http://localhost:5000/graphql", // Replace with your GraphQL server endpoint
 });
 
 // Create an error link
