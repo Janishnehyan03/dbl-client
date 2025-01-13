@@ -8,11 +8,11 @@ const GET_NEW_ARRIVALS = gql`
     newArrivals {
       id
       title
-      publishers{
+      publishers {
         id
         publisherName
       }
-      authors{
+      authors {
         firstName
         lastName
       }
@@ -32,7 +32,9 @@ const NewArrivals: React.FC = () => {
       <div className="max-w-full px-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg text-gray-800 font-bold uppercase">New Arrivals</h2>
+          <h2 className="text-lg text-gray-800 font-bold uppercase">
+            New Arrivals
+          </h2>
           <a href="#" className="text-blue-500 text-sm hover:underline">
             See All
           </a>
@@ -40,9 +42,10 @@ const NewArrivals: React.FC = () => {
 
         {/* Book Cards in a Grid */}
         <div className="lg:grid lg:grid-cols-4 gap-2">
-          {data.newArrivals.map((book: any, i: number) => (
-            <BookCard book={book} key={i} />
-          ))}
+          {data.newArrivals.length > 0 &&
+            data.newArrivals.map((book: any, i: number) => (
+              <BookCard book={book} key={i} />
+            ))}
         </div>
       </div>
     </section>
