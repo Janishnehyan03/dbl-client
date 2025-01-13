@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import Axios from "../../../../utils/Axios";
-import BookDetails from "./BookDetails";
-import AuthorInput from "./AuthorInput";
-import AuthorPopup from "../components/AuthorPopup";
-import PublisherInput from "./PublisherInput";
 import AddPublisherForm from "../../publisher/PublisherPopUp";
+import AuthorPopup from "../components/AuthorPopup";
+import AuthorInput from "./AuthorInput";
+import BookDetails from "./BookDetails";
+import PublisherInput from "./PublisherInput";
 
 function EditBook() {
   const { bookId } = useParams();
@@ -31,21 +31,25 @@ function EditBook() {
     price: "",
     availability: "",
     location: "",
+    isNewArrival: false,
+    published: false,
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  const handleChange = (e: any) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      await Axios.patch(`/books/${bookId}`, formData);
+      await Axios.patch(`/books/${bookId}`, {
+        ...formData,
+        isNewArrival: formData.published ? formData.isNewArrival : false,
+      });
       toast.success("Book edited successfully");
     } catch (error: any) {
       console.error(error.response);

@@ -1,16 +1,16 @@
-// src/graphql/queries/memberQuery.js
+// src/graphql/queries/studentQuery.js
 import { gql } from "@apollo/client";
 
 export const GET_STUDENTS = gql`
-  query getStudents($limit: Int) {
-    students(limit: $limit) {
+  query getStudents($limit: Int, $searchTerm: String) {
+    students(limit: $limit, searchTerm: $searchTerm) {
       id
       studentName
       admissionNumber
-      class{
+      class {
         className
       }
-      section{
+      section {
         sectionName
       }
     }

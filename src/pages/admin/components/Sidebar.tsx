@@ -5,17 +5,20 @@ import {
   DollarSign,
   FileText,
   LayoutDashboard,
+  Lightbulb,
   LocateIcon,
   Menu,
   Settings,
   Share,
   UserCog2,
-  Users,
+  Users
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useConfiguration } from "../../../utils/contexts/configurationContext";
 
 const Sidebar: React.FC = () => {
+  const { configuration } = useConfiguration();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(true);
 
@@ -47,63 +50,59 @@ const Sidebar: React.FC = () => {
     },
     { icon: <Building />, text: "Sections / Classes", path: "/sections" },
     { icon: <DollarSign />, text: "Fees pending", path: "/fees-pending" },
+    { icon: <Lightbulb />, text: "Daily Quotes", path: "/daily-quotes" },
     { icon: <Settings />, text: "Configurations", path: "/configurations" },
   ];
 
   return (
     <div className="flex">
       <div
-        className={`${
-          isOpen ? "w-72" : "w-20"
-        } h-screen p-5 pt-8 relative duration-300 backdrop-blur-md 
-        bg-white bg-opacity-20 border-r  border-white border-opacity-30 shadow-lg`}
+        className={`${isOpen ? "w-72" : "w-20"
+          } h-screen p-5 pt-8 relative duration-300 backdrop-blur-md 
+        bg-white bg-opacity-20 border-r border-white border-opacity-30 shadow-lg`}
       >
         <ArrowRight
-          className={`absolute cursor-pointer -right-3 top-9 w-7 h-7 border border-opacity-50 rounded-full transition-all duration-300 transform ${
-            isOpen ? "rotate-0" : "rotate-180"
-          }`}
+          className={`absolute cursor-pointer -right-3 top-9 w-7 h-7 border border-opacity-50 rounded-full transition-all duration-300 transform ${isOpen ? "rotate-0" : "rotate-180"
+            }`}
           onClick={() => setIsOpen(!isOpen)}
         />
-        <div className="flex gap-x-4 items-center">
-          <img
-            src="/logo.png"
-            alt="Library Logo"
-            className={`h-10 transform transition-transform duration-500 ${
-              isOpen && "rotate-[360deg]"
-            }`}
-          />
-          <h1
-            className={`text-gray-800 text-opacity-90 font-medium text-xl transition-transform duration-200 ${
-              !isOpen && "scale-0"
-            }`}
-          >
-            DR. U BAPPUTY HAJI LIBRARY
-          </h1>
-        </div>
+        <Link to={`/`}>
+          <div className="flex gap-x-4 items-center">
+            <img
+              src="/logo.png"
+              alt="Library Logo"
+              className={`h-10 transform transition-transform duration-500 ${isOpen && "rotate-[360deg]"
+                }`}
+            />
+            <h1
+              className={`text-gray-800 text-opacity-90 font-medium text-xl transition-transform duration-200 ${!isOpen && "scale-0"
+                }`}
+            >
+              {configuration?.libraryName}
+            </h1>
+          </div>
+        </Link>
         <ul className="pt-6">
           {menuItems.map((item, index) => (
             <Link
               to={item.path}
               key={index}
-              className={`flex items-center p-3 my-2 rounded-md cursor-pointer transition-colors duration-200 ${
-                location.pathname === item.path
-                  ? "bg-gray-700 bg-opacity-40 text-white"
-                  : "text-gray-800 hover:bg-gray-400 hover:bg-opacity-20"
-              }`}
+              className={`flex items-center p-3 my-2 rounded-md cursor-pointer transition-colors duration-200 ${location.pathname === item.path
+                  ? "bg-teal-600 text-white"
+                  : "text-gray-800 hover:bg-teal-500 hover:bg-opacity-20"
+                }`}
             >
               <div
-                className={`mr-3 ${
-                  location.pathname === item.path
+                className={`mr-3 ${location.pathname === item.path
                     ? "text-white"
                     : "text-gray-800"
-                }`}
+                  }`}
               >
                 {item.icon}
               </div>
               <span
-                className={`flex-1 font-medium transition-all ${
-                  !isOpen && "hidden"
-                }`}
+                className={`flex-1 font-medium transition-all ${!isOpen && "hidden"
+                  }`}
               >
                 {item.text}
               </span>
@@ -113,7 +112,6 @@ const Sidebar: React.FC = () => {
             </Link>
           ))}
         </ul>
-      
       </div>
     </div>
   );

@@ -1,10 +1,9 @@
 // components/Dashboard.tsx
 import React from "react";
-import Stats from "./Stats.tsx";
-import FeesPending from "./FeesPending.tsx";
-import StudentProfile from "./StudentProfile.tsx";
 import BookIssuedReturned from "./BookIssuedReturned.tsx";
-import Wishlist from "./Wishlist.tsx";
+import FeesPending from "./FeesPending.tsx";
+import Stats from "./Stats.tsx";
+import StudentProfile from "./StudentProfile.tsx";
 
 const Dashboard: React.FC = () => {
   return (
@@ -18,7 +17,6 @@ const Dashboard: React.FC = () => {
       <FeesPending />
       <StudentProfile />
       <BookIssuedReturned />
-      <Wishlist />
     </div>
   );
 };

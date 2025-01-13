@@ -7,7 +7,7 @@ interface AuthorPopupProps {
   setShowAuthor: (show: boolean) => void;
   isEditing?: boolean;
   authorId?: string;
-  setIsEditing: any;
+  setIsEditing?: any;
 }
 
 const AuthorPopup: React.FC<AuthorPopupProps> = ({
@@ -27,25 +27,6 @@ const AuthorPopup: React.FC<AuthorPopupProps> = ({
   });
 
   // Fetch author details if editing
-  useEffect(() => {
-    const fetchAuthor = async () => {
-      if (isEditing && authorId) {
-        setLoading(true);
-        try {
-          const res = await Axios.get(`/authors/${authorId}`);
-          if (res.status === 200) {
-            setFormData(res.data); // Populate form with fetched author data
-          }
-        } catch (error) {
-          toast.error("Failed to fetch author details");
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchAuthor();
-  }, [isEditing, authorId]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -78,6 +59,25 @@ const AuthorPopup: React.FC<AuthorPopupProps> = ({
       setLoading(false);
     }
   };
+  useEffect(() => {
+    const fetchAuthor = async () => {
+      if (isEditing && authorId) {
+        setLoading(true);
+        try {
+          const res = await Axios.get(`/authors/${authorId}`);
+          if (res.status === 200) {
+            setFormData(res.data); // Populate form with fetched author data
+          }
+        } catch (error) {
+          toast.error("Failed to fetch author details");
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchAuthor();
+  }, [isEditing, authorId]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">

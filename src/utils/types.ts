@@ -60,9 +60,10 @@ export interface Member {
 }
 
 export interface Book {
-  _id: string;
+  id: string;
   title: string;
   accessionNumber: string;
+  image?: string;
 }
 
 export interface Issue {
@@ -72,4 +73,11 @@ export interface Issue {
   returnDate: string;
   daysLate: number;
   fine: number;
+}
+
+export interface LibraryDetails {
+  libraryName: string;
+  libraryAddress?: string;
+  contactEmail?: string;
+  contactPhone?: string;
 }

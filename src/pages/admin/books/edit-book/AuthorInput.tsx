@@ -1,6 +1,7 @@
-import { Trash } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Axios from "../../../../utils/Axios";
+import toast from "react-hot-toast";
+import { Plus } from "lucide-react";
 
 interface Author {
   _id: string;
@@ -25,6 +26,8 @@ const AuthorInput: React.FC<AuthorProps> = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [newAuthor, setNewAuthor] = useState({ firstName: "", lastName: "" });
 
   useEffect(() => {
     const fetchAuthors = async () => {
@@ -62,21 +65,39 @@ const AuthorInput: React.FC<AuthorProps> = ({
       try {
         await Axios.patch(`/books/${bookId}/author/${author._id}`);
         getBook();
+        toast.success("Author added")
       } catch (error: any) {
         console.log(error.response);
       }
     }
   };
 
-  const handleRemoveAuthor = async (removedAuthor: Author) => {
+  const handleRemoveAuthor = async (e: any, removedAuthor: Author) => {
+    e.preventDefault()
     try {
       await Axios.delete(`/books/${bookId}/author/${removedAuthor._id}`);
       setSelectedAuthors((prev) =>
         prev.filter((author) => author._id !== removedAuthor._id)
       );
       getBook();
+      toast.success("Author removed")
     } catch (error: any) {
       console.error("Failed to remove author:", error.response);
+    }
+  };
+
+  const handleSaveAuthor = async (e: any) => {
+    e.preventDefault();
+    try {
+      await Axios.post("/authors", newAuthor);
+      setShowModal(false);
+      setNewAuthor({ firstName: "", lastName: "" });
+      // Reload all authors after saving
+      toast.success("Author added");
+      const response = await Axios.get("/authors");
+      setAllAuthors(response.data);
+    } catch (error: any) {
+      console.error("Failed to save author:", error.response);
     }
   };
 
@@ -101,37 +122,40 @@ const AuthorInput: React.FC<AuthorProps> = ({
   });
 
   return (
-    <div className="w-full space-y-6 md:space-y-0 md:flex md:space-x-8">
-      <div className="md:flex-1">
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">
+    <div className="w-full space-y-6 md:space-y-0 md:flex md:space-x-8 p-6 bg-gray-50 rounded-lg shadow-md">
+      <div className="md:flex-1 bg-white rounded-lg shadow-sm p-4">
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">
           Selected Authors
         </h3>
-        <ul className="mt-2 max-h-40 overflow-y-auto border border-gray-300 rounded-md bg-white shadow-sm">
+        <ul className="mt-2 max-h-80 overflow-y-auto border border-gray-300 rounded-md bg-gray-50 shadow">
           {selectedAuthors.length === 0 ? (
-            <li className="p-2 text-gray-500 text-center">
+            <li className="p-4 text-gray-500 text-center italic">
               No authors selected
             </li>
           ) : (
             selectedAuthors.map((author) => (
               <li
                 key={author._id}
-                className="flex justify-between items-center p-2 bg-gray-100 hover:bg-gray-200 transition"
+                className="flex justify-between items-center p-3 bg-gray-100 hover:bg-gray-200 transition duration-200"
               >
-                <span>
+                <span className="text-gray-800">
                   {author.firstName} {author.lastName}
                 </span>
                 <button
-                  className="text-red-500 hover:text-red-700"
-                  onClick={() => handleRemoveAuthor(author)}
+                  className="text-red-500 hover:text-red-700 transition duration-200"
+                  onClick={(e) => handleRemoveAuthor(e, author)}
+                  aria-label="Remove Author"
+                  type="submit"
                 >
-                  <Trash />
+                  Remove
                 </button>
               </li>
             ))
           )}
         </ul>
       </div>
-      <div className="relative w-full md:w-1/2">
+
+      <div className="relative w-full md:w-1/2 bg-white rounded-lg shadow-sm p-4">
         <label
           htmlFor="search"
           className="block text-sm font-medium text-gray-700 mb-1"
@@ -148,22 +172,30 @@ const AuthorInput: React.FC<AuthorProps> = ({
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 mb-4"
           autoComplete="off"
         />
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">
+        <button
+          onClick={() => setShowModal(true)}
+          type="button"
+          className="px-4 py-2 flex bg-teal-600 text-white rounded-md hover:bg-teal-700"
+        >
+         <Plus/> New Author
+        </button>
+
+        <h3 className="text-lg font-semibold text-gray-800 mt-4 mb-2">
           Available Authors
         </h3>
-        <ul className="max-h-40 overflow-y-auto border border-gray-300 rounded-md bg-white shadow-sm">
+        <ul className="max-h-40 overflow-y-auto border border-gray-300 rounded-md bg-gray-50 shadow">
           {filteredAuthors.length === 0 ? (
-            <li className="p-2 text-gray-500 text-center">
+            <li className="p-4 text-gray-500 text-center italic">
               No matching authors found
             </li>
           ) : (
             filteredAuthors.map((author) => (
               <li
                 key={author._id}
-                className="flex justify-between items-center p-2 cursor-pointer hover:bg-gray-100 transition"
+                className="flex justify-between items-center p-3 cursor-pointer hover:bg-gray-100 transition duration-200"
                 onClick={() => handleSelectAuthor(author)}
               >
-                <span>
+                <span className="text-gray-800">
                   {author.firstName} {author.lastName}
                 </span>
               </li>
@@ -171,6 +203,50 @@ const AuthorInput: React.FC<AuthorProps> = ({
           )}
         </ul>
       </div>
+
+      {/* Modal for new author */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              Add New Author
+            </h3>
+            <input
+              type="text"
+              placeholder="First Name"
+              value={newAuthor.firstName}
+              onChange={(e) =>
+                setNewAuthor((prev) => ({ ...prev, firstName: e.target.value }))
+              }
+              className="w-full mb-4 p-2 border border-gray-300 rounded-md"
+            />
+            <input
+              type="text"
+              placeholder="Last Name"
+              value={newAuthor.lastName}
+              onChange={(e) =>
+                setNewAuthor((prev) => ({ ...prev, lastName: e.target.value }))
+              }
+              className="w-full mb-4 p-2 border border-gray-300 rounded-md"
+            />
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                onClick={handleSaveAuthor}
+                className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

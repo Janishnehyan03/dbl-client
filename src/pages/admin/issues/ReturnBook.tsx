@@ -88,7 +88,7 @@ const ReturnBook: React.FC = () => {
         <input
           type="text"
           value={identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
+          onChange={(e) => setIdentifier(e.target.value.toUpperCase())}
           className="p-3 border border-gray-300 rounded-md focus:ring focus:ring-red-400 focus:border-red-500 w-full"
           placeholder="Enter admission number"
         />

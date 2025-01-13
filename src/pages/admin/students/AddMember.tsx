@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Axios from "../../../utils/Axios";
+import toast from "react-hot-toast";
 
-const AddStudent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [studentName, setStudentName] = useState("");
+const AddMember: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [memberName, setMemberName] = useState("");
   const [admissionNumber, setAdmissionNumber] = useState("");
+  const [uniqueId, setUniqueId] = useState(""); // New state for unique ID
   const [studentClass, setStudentClass] = useState("");
   const [section, setSection] = useState("");
+  const [memberType, setMemberType] = useState("student"); // Added state for member type
   const [classOptions, setClassOptions] = useState<
     { _id: string; className: string }[]
   >([]);
@@ -36,21 +39,27 @@ const AddStudent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     e.preventDefault();
     try {
       await Axios.post("/members", {
-        memberType: "student",
-        studentName,
-        admissionNumber,
-        class: studentClass,
-        section,
+        memberType,
+        ...(memberType === "student"
+          ? { admissionNumber, class: studentClass, section, studentName: memberName } // For students
+          : { uniqueId, section, teacherName: memberName } // For teachers
+        ),
       });
-      alert("Student added successfully!");
+      toast.success(`${memberType.charAt(0).toUpperCase() + memberType.slice(1)} added successfully!`);
       onClose(); // Call onClose to hide the form after successful submission
-      setStudentName("");
-      setAdmissionNumber("");
-      setStudentClass("");
-      setSection("");
+      resetForm(); // Reset the form fields
     } catch (error) {
-      alert("Failed to add student.");
+      toast.error(`Failed to add ${memberType}.`);
     }
+  };
+
+  const resetForm = () => {
+    setMemberName("");
+    setAdmissionNumber("");
+    setUniqueId(""); // Reset unique ID
+    setStudentClass("");
+    setSection("");
+    setMemberType("student"); // Reset member type
   };
 
   if (loading) {
@@ -65,56 +74,78 @@ const AddStudent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="max-w-lg mx-auto p-10 bg-white shadow-lg rounded-lg">
         <h2 className="text-3xl font-semibold text-center text-gray-600 mb-8">
-          Register New Student
+          Register New Member
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Student Name
+                Member Name
               </label>
               <input
                 type="text"
-                value={studentName}
-                onChange={(e) => setStudentName(e.target.value)}
+                value={memberName}
+                onChange={(e) => setMemberName(e.target.value)}
                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-gray-300 focus:border-gray-500"
-                placeholder="Enter student's full name"
+                placeholder="Enter member's full name"
                 required
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Admission Number
-              </label>
-              <input
-                type="text"
-                value={admissionNumber}
-                onChange={(e) => setAdmissionNumber(e.target.value)}
-                className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-gray-300 focus:border-gray-500"
-                placeholder="Enter admission number"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Class
+                Member Type
               </label>
               <select
-                value={studentClass}
-                onChange={(e) => setStudentClass(e.target.value)}
+                value={memberType}
+                onChange={(e) => setMemberType(e.target.value)}
                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-gray-300 focus:border-gray-500"
-                required
               >
-                <option value="" disabled>
-                  Select Class
-                </option>
-                {classOptions.map((cls) => (
-                  <option key={cls._id} value={cls._id}>
-                    {cls.className}
-                  </option>
-                ))}
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
               </select>
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                {memberType === "student" ? "Admission Number" : "Unique ID"}
+              </label>
+              <input
+                type="text"
+                value={memberType === "student" ? admissionNumber : uniqueId}
+                onChange={(e) =>
+                  memberType === "student"
+                    ? setAdmissionNumber(e.target.value)
+                    : setUniqueId(e.target.value)
+                }
+                className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-gray-300 focus:border-gray-500"
+                placeholder={memberType === "student" ? "Enter admission number" : "Enter unique ID"}
+                required
+              />
+            </div>
+           
+            {memberType === "student" && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Class
+                  </label>
+                  <select
+                    value={studentClass}
+                    onChange={(e) => setStudentClass(e.target.value)}
+                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-gray-300 focus:border-gray-500"
+                    required
+                  >
+                    <option value="" disabled>
+                      Select Class
+                    </option>
+                    {classOptions.map((cls) => (
+                      <option key={cls._id} value={cls._id}>
+                        {cls.className}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </>
+            )}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Section
@@ -140,7 +171,7 @@ const AddStudent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             type="submit"
             className="w-full bg-gray-500 text-white py-3 rounded-md font-semibold hover:bg-gray-600 transition duration-200"
           >
-            Register Student
+            Register {memberType.charAt(0).toUpperCase() + memberType.slice(1)}
           </button>
         </form>
         <button onClick={onClose} className="mt-4 text-red-500">
@@ -151,4 +182,4 @@ const AddStudent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   );
 };
 
-export default AddStudent;
+export default AddMember;

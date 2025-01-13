@@ -1,75 +1,32 @@
 import React from "react";
+import { gql, useQuery } from "@apollo/client";
+import BookCard from "../../components/BookCard";
 
-interface Book {
-  title: string;
-  author: string;
-  image: string;
-}
-
-const books: Book[] = [
-  {
-    title: "In the Footsteps of the Prophet",
-    author: "Tariq Ramadan",
-    image: "https://th.bing.com/th/id/OIP.0qxWWiv5uAS-T2OK11jpawHaLZ?w=208&h=308&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-  },
-  {
-    title: "The Sealed Nectar",
-    author: "Safi-ur-Rahman al-Mubarakpuri",
-    image: "https://i.pinimg.com/564x/f7/c8/12/f7c812c9b0296cd9f119e33a06d9a256.jpg",
-  },
-  {
-    title: "Purification of the Heart",
-    author: "Hamza Yusuf",
-    image: "https://www.ingramspark.com/hs-fs/hubfs/TheSumofAllThings_cover_June21_option4(1).jpg?width=1125&name=TheSumofAllThings_cover_June21_option4(1).jpg",
-  },
-  {
-    title: "Lost Islamic History",
-    author: "Firas Alkhateeb",
-    image: "https://miblart.com/wp-content/uploads/2020/01/crime-and-mystery-cover-scaled-1.jpeg",
-  },
-  {
-    title: "In the Footsteps of the Prophet",
-    author: "Tariq Ramadan",
-    image: "https://th.bing.com/th/id/OIP.0qxWWiv5uAS-T2OK11jpawHaLZ?w=208&h=308&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-  },
-  {
-    title: "The Sealed Nectar",
-    author: "Safi-ur-Rahman al-Mubarakpuri",
-    image: "https://i.pinimg.com/564x/f7/c8/12/f7c812c9b0296cd9f119e33a06d9a256.jpg",
-  },
-  {
-    title: "Purification of the Heart",
-    author: "Hamza Yusuf",
-    image: "https://www.ingramspark.com/hs-fs/hubfs/TheSumofAllThings_cover_June21_option4(1).jpg?width=1125&name=TheSumofAllThings_cover_June21_option4(1).jpg",
-  },
-  {
-    title: "Lost Islamic History",
-    author: "Firas Alkhateeb",
-    image: "https://miblart.com/wp-content/uploads/2020/01/crime-and-mystery-cover-scaled-1.jpeg",
-  },
-  {
-    title: "The Sealed Nectar",
-    author: "Safi-ur-Rahman al-Mubarakpuri",
-    image: "https://i.pinimg.com/564x/f7/c8/12/f7c812c9b0296cd9f119e33a06d9a256.jpg",
-  },
-  {
-    title: "Lost Islamic History",
-    author: "Firas Alkhateeb",
-    image: "https://miblart.com/wp-content/uploads/2020/01/crime-and-mystery-cover-scaled-1.jpeg",
-  },
-  {
-    title: "Purification of the Heart",
-    author: "Hamza Yusuf",
-    image: "https://www.ingramspark.com/hs-fs/hubfs/TheSumofAllThings_cover_June21_option4(1).jpg?width=1125&name=TheSumofAllThings_cover_June21_option4(1).jpg",
-  },
-  {
-    title: "Lost Islamic History",
-    author: "Firas Alkhateeb",
-    image: "https://miblart.com/wp-content/uploads/2020/01/crime-and-mystery-cover-scaled-1.jpeg",
-  },
-];
+// Define GraphQL query to get new arrivals
+const GET_NEW_ARRIVALS = gql`
+  query GetNewArrivals {
+    newArrivals {
+      id
+      title
+      publishers{
+        id
+        publisherName
+      }
+      authors{
+        firstName
+        lastName
+      }
+      # image
+    }
+  }
+`;
 
 const NewArrivals: React.FC = () => {
+  const { loading, error, data } = useQuery(GET_NEW_ARRIVALS);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
   return (
     <section className="m-10 p-6 bg-white shadow-md rounded-xl">
       <div className="max-w-full px-4">
@@ -81,28 +38,10 @@ const NewArrivals: React.FC = () => {
           </a>
         </div>
 
-        {/* Book Cards in a Single Line, Responsive */}
-        <div className="lg:grid lg:grid-cols-6 gap-3">
-          {books.map((book, i) => (
-            <div
-              key={i}
-              className="flex-shrink-0 w-48 bg-gray-200 rounded-lg shadow-lg hover:scale-105 transition cursor-pointer"
-            >
-              {/* Book Image */}
-              <img
-                src={book.image}
-                alt={book.title}
-                className="w-full h-60 object-cover rounded-t-lg mb-2"
-              />
-              {/* Title and Author */}
-              <div className="p-3">
-                <p className="text-gray-800 truncate">
-                  {book.title}
-                  <span className="text-gray-400">...</span>
-                </p>
-                <p className="text-sm text-gray-500">{book.author}</p>
-              </div>
-            </div>
+        {/* Book Cards in a Grid */}
+        <div className="lg:grid lg:grid-cols-4 gap-2">
+          {data.newArrivals.map((book: any, i: number) => (
+            <BookCard book={book} key={i} />
           ))}
         </div>
       </div>

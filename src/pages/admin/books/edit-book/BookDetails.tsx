@@ -81,7 +81,7 @@ function BookDetails({ formData, handleChange, handleSubmit }: any) {
           htmlFor="englishTitle"
           className="block text-sm font-medium text-gray-700 mb-1"
         >
-         ACC Number
+          ACC Number
         </label>
         <input
           type="text"
@@ -98,7 +98,7 @@ function BookDetails({ formData, handleChange, handleSubmit }: any) {
           htmlFor="englishTitle"
           className="block text-sm font-medium text-gray-700 mb-1"
         >
-         Call Number
+          Call Number
         </label>
         <input
           type="text"
@@ -246,8 +246,8 @@ function BookDetails({ formData, handleChange, handleSubmit }: any) {
           </option>
           {/* Placeholder Option */}
           {categories?.map((category) => (
-            <option key={category._id} value={category._id}>
-              {category.categoryName} {/* Display the category name */}
+            <option key={category?._id} value={category?._id}>
+              {category?.categoryName} {/* Display the category name */}
             </option>
           ))}
         </select>
@@ -308,12 +308,32 @@ function BookDetails({ formData, handleChange, handleSubmit }: any) {
           }}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
         >
-          <option value="false">No</option>
           <option value="true">Yes</option>
+          <option value="false">No</option>
         </select>
       </div>
-
-      
+      {formData.published !== "false" && (
+        <div className="mt-4">
+          <label
+            htmlFor="newArrival"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            New Arrival
+          </label>
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-gray-600">No</span>
+            <input
+              type="checkbox"
+              id="isNewArrival"
+              name="isNewArrival"
+              checked={formData.isNewArrival}
+              onChange={handleChange}
+              className="w-10 h-6 bg-gray-300 rounded-full cursor-pointer transition-colors duration-300"
+            />
+            <span className="text-sm text-gray-600">Yes</span>
+          </div>
+        </div>
+      )}
 
       {/* Description */}
       <div className="md:col-span-2">
@@ -333,6 +353,7 @@ function BookDetails({ formData, handleChange, handleSubmit }: any) {
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
         ></textarea>
       </div>
+
       <div className="mt-6" onClick={handleSubmit}>
         <button
           type="submit"

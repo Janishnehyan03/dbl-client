@@ -9,31 +9,24 @@ function AuthorsPage() {
   const [authors, setAuthors] = useState<Author[]>([]);
   const [sortOption, setSortOption] = useState("a-z");
   const [isEditing, setIsEditing] = useState(false);
-  const [authorId, setAuthorId] = useState<any>("");
+  const [authorId, setAuthorId] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
 
   const getAuthors = async () => {
     try {
-      let { data } = await Axios.get("/authors");
+      const { data } = await Axios.get("/authors");
       setAuthors(data);
     } catch (error: any) {
-      console.log(error.response);
+      console.error(error.response);
     }
   };
 
-  const sortPublishers = (authors: Author[], option: string) => {
-    switch (option) {
-      case "a-z":
-        return authors.sort((a, b) =>
-          (a.firstName || "").localeCompare(b.firstName || "")
-        );
-      case "z-a":
-        return authors.sort((a, b) =>
-          (b.firstName || "").localeCompare(a.firstName || "")
-        );
-      default:
-        return authors;
-    }
+  const sortAuthors = (authors: any[], option: string) => {
+    return authors.sort((a, b) => 
+      option === "a-z" 
+        ? (a.firstName || "").localeCompare(b.firstName || "") 
+        : (b.firstName || "").localeCompare(a.firstName || "")
+    );
   };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -51,10 +44,7 @@ function AuthorsPage() {
 
   return (
     <div className="bg-gray-50 p-5 rounded-lg shadow-lg">
-      <h1 className="bg-gray-800 p-4 text-center text-white font-semibold rounded-t-lg">
-        Authors
-      </h1>
-
+      <h1 className="bg-gray-800 p-4 text-center text-white font-semibold rounded-t-lg">Authors</h1>
       <button
         onClick={() => setShowForm(true)}
         className="bg-gray-700 hover:bg-gray-800 transition-colors text-white p-3 rounded-md mt-3 ml-auto flex items-center space-x-2"
@@ -72,7 +62,6 @@ function AuthorsPage() {
         />
       )}
 
-      {/* Search Bar */}
       <div className="mt-4 mb-4">
         <input
           type="text"
@@ -85,9 +74,7 @@ function AuthorsPage() {
 
       <div className="overflow-x-auto mt-4">
         <div className="flex items-center p-2 bg-gray-200 max-w-sm rounded-md space-x-3 mb-4">
-          <label htmlFor="sort" className="text-sm font-medium text-gray-700">
-            Sort By:
-          </label>
+          <label htmlFor="sort" className="text-sm font-medium text-gray-700">Sort By:</label>
           <select
             id="sort"
             value={sortOption}
@@ -109,29 +96,18 @@ function AuthorsPage() {
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm">
-            {sortPublishers(filteredAuthors, sortOption).map((author) => (
-              <tr
-                key={author._id}
-                className="border-b border-gray-200 hover:bg-gray-100 transition"
-              >
+            {sortAuthors(filteredAuthors, sortOption).map((author) => (
+              <tr key={author._id} className="border-b border-gray-200 hover:bg-gray-100 transition">
+                <td className="py-3 px-6 text-left whitespace-nowrap">{author.firstName} {author.lastName}</td>
+                <td className="py-3 px-6 text-left whitespace-nowrap">{author.email}</td>
+                <td className="py-3 px-6 text-left whitespace-nowrap">{author.contactNumber}</td>
                 <td className="py-3 px-6 text-left whitespace-nowrap">
-                  {author.firstName} {author.lastName}
-                </td>
-                <td className="py-3 px-6 text-left whitespace-nowrap">
-                  {author.email}
-                </td>
-                <td className="py-3 px-6 text-left whitespace-nowrap">
-                  {author.contactNumber}
-                </td>
-                <td className="py-3 px-6 text-left whitespace-nowrap">
-                  <a href={author.website} className="text-blue-700">
-                    {author.website}
-                  </a>
+                  <a href={author.website} className="text-blue-700">{author.website}</a>
                 </td>
                 <td className="py-3 px-6 text-left whitespace-nowrap">
                   <button
                     onClick={() => {
-                      setAuthorId(author._id);
+                      setAuthorId(author?._id);
                       setIsEditing(true);
                     }}
                   >
