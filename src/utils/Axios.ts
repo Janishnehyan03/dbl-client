@@ -2,7 +2,6 @@ import axios from "axios";
 
 const Axios = axios.create({
   baseURL: import.meta.env.VITE_WEBSITE_URL, // Access Vite environment variable
-  timeout: 5000,
   headers: {
     "Content-Type": "application/json",
   },
