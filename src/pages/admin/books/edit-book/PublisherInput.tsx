@@ -1,7 +1,7 @@
-import { Trash, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import Axios from "../../../../utils/Axios";
 import toast from "react-hot-toast";
+import Axios from "../../../../utils/Axios";
 
 interface Publisher {
   _id: string;
