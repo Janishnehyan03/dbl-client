@@ -1,68 +1,116 @@
-import { Search } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Axios from "../../utils/Axios";
+import React, { useState, useEffect } from "react";
 
-interface Quote {
-  text: string;
+interface Book {
+  title: string;
   author: string;
+  cover: string;
 }
 
 const HeroSection: React.FC = () => {
-  const [quotes, setQuotes] = useState<Quote[]>([]);
-  const [currentQuote, setCurrentQuote] = useState(0);
+  const booksSet: Book[][] = [
+    [
+      {
+        title: "1984",
+        author: "George Orwell",
+        cover: "https://images.unsplash.com/photo-1735656244152-5d0ad782f71d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8",
+      },
+      {
+        title: "To Kill a Mockingbird",
+        author: "Harper Lee",
+        cover: "https://images.unsplash.com/photo-1735287367310-2648443f086f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D",
+      },
+      {
+        title: "The Great Gatsby",
+        author: "F. Scott Fitzgerald",
+        cover: "https://images.unsplash.com/photo-1735408928209-16a5d6ba8ccf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNXx8fGVufDB8fHx8fA%3D%3D",
+      },
+    ],
+    [
+      {
+        title: "Moby Dick",
+        author: "Herman Melville",
+        cover: "https://images.unsplash.com/photo-1735597821463-05f8cbd08fca?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyM3x8fGVufDB8fHx8fA%3D%3D",
+      },
+      {
+        title: "Pride and Prejudice",
+        author: "Jane Austen",
+        cover: "https://plus.unsplash.com/premium_photo-1668447598676-30bbd44792c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0NHx8fGVufDB8fHx8fA%3D%3D",
+      },
+      {
+        title: "War and Peace",
+        author: "Leo Tolstoy",
+        cover: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGJvb2slMjBjb3ZlcnxlbnwwfHwwfHx8",
+      },
+    ],
+  ];
 
-  const fetchQuotes = async () => {
-    try {
-      const response = await Axios.get("/dailyQuotes");
-      setQuotes(response.data);
-    } catch (error) {
-      console.error("Error fetching quotes:", error);
-    }
-  };
+  const [currentBooksIndex, setCurrentBooksIndex] = useState(0);
 
   useEffect(() => {
-    fetchQuotes();
-  }, []);
+    const interval = setInterval(() => {
+      setCurrentBooksIndex((prevIndex) => (prevIndex + 1) % booksSet.length);
+    }, 8000); // Change books every 8 seconds
 
-  useEffect(() => {
-    const quoteInterval = setInterval(() => {
-      setCurrentQuote((prev) => (prev + 1) % quotes.length);
-    }, 7000);
-    return () => clearInterval(quoteInterval);
-  }, [quotes]);
+    return () => clearInterval(interval); // Cleanup on component unmount
+  }, [booksSet.length]);
+
+  const currentBooks = booksSet[currentBooksIndex];
 
   return (
-    <section className="relative bg-gradient-to-r from-blue-500 to-purple-600 text-white p-20 flex flex-col items-center justify-center text-center overflow-hidden">
-      {/* Main Title */}
-      <h1 className="text-4xl sm:text-6xl font-bold mb-4">
-        Discover Your Next Favorite Book
-      </h1>
-      <p className="text-lg sm:text-xl mb-8">
-        Explore thousands of books across every genre, handpicked just for you.
-      </p>
+    <div className="font-sans min-h-screen flex items-center justify-center">
+      <main className="container mx-auto px-6 md:px-12 lg:px-24 py-16">
+        <section className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-16">
+          {/* Text Section */}
+          <div className="md:w-1/2 text-center md:text-left">
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-gray-800">
+              Find Your Next Book
+            </h2>
+            <p className="text-gray-600 mb-8 text-lg md:text-xl">
+              Our most popular and trending <span className="font-semibold">On.Book</span> perfect. Not sure what to read next? Find your reading mood.
+            </p>
+            <button className="bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition duration-300">
+              Explore Now
+            </button>
+          </div>
 
-      {/* Quote Section */}
-      {quotes.length > 0 && (
-        <div
-          key={currentQuote}
-          className="bg-white bg-opacity-20 p-6 rounded-lg shadow-lg backdrop-blur-md border border-white border-opacity-30 transition-opacity duration-700 ease-in-out animate-fade-in"
-        >
-          <p className="text-lg italic mb-2 text-white">
-            {`"${quotes[currentQuote].text}"`}
-          </p>
-          <p className="text-sm font-semibold text-white">
-            - {quotes[currentQuote].author}
-          </p>
-        </div>
-      )}
-      <Link to={`/search`}>
-        <div className="flex items-center bg-white px-4 py-2 text-blue-800 rounded-3xl mt-3 border border-white hover:bg-transparent hover:text-white">
-          <Search />
-          <button className="ml-2">Search Books</button>
-        </div>
-      </Link>
-    </section>
+          {/* Books Section */}
+          <div className="md:w-1/2 flex space-x-4 overflow-hidden">
+            {currentBooks.map((book, index) => (
+              <div
+                key={book.title}
+                className={`w-full md:w-1/3 p-2 transform transition-transform duration-500 ease-in-out ${currentBooksIndex % 2 === 0
+                    ? "animate-fadeInUp"
+                    : "animate-fadeInDown"
+                  }`}
+              >
+                <div
+                  className={`overflow-hidden ${index === 1 ? "rounded-b-full" : "rounded-t-full"
+                    }`}
+                >
+                  {index === 1 && (
+                    <div className="p-4 text-center text-sm ">
+                      <h3 className="font-semibold">{book.title}</h3>
+                      <p className="text-gray-600">{book.author}</p>
+                    </div>
+                  )}
+                  <img
+                    src={book.cover}
+                    alt={book.title}
+                    className="w-full h-64 object-cover"
+                  />
+                  {index !== 1 && (
+                    <div className="p-4 text-center text-sm ">
+                      <h3 className="font-semibold">{book.title}</h3>
+                      <p className="text-gray-600">{book.author}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </main>
+    </div>
   );
 };
 

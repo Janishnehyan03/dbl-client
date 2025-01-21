@@ -4,15 +4,25 @@ export default {
 
   theme: {
     extend: {
+      fontFamily: {
+        amiri: ['"Amiri"', "serif"],
+        dmSans: ['"DM Sans"', "sans-serif"],
+        notoMalayalam: ['"Noto Sans Malayalam"', "sans-serif"],
+        notoGeorgian: ['"Noto Serif Georgian"', "serif"],
+        roboto: ['"Roboto"', "sans-serif"],
+      },
       animation: {
-        animation: {
-          'fade-in-and-up': 'fadeInUp 1s ease-in-out forwards',
+        fadeInUp: "fadeInUp 0.5s ease-in-out",
+        fadeInDown: "fadeInDown 0.5s ease-in-out",
+      },
+      keyframes: {
+        fadeInUp: {
+          "0%": { opacity: 0, transform: "translateY(50px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
         },
-        keyframes: {
-          fadeInUp: {
-            '0%': { opacity: 0, transform: 'translateY(20px)' },
-            '100%': { opacity: 1, transform: 'translateY(0)' },
-          },
+        fadeInDown: {
+          "0%": { opacity: 0, transform: "translateY(-50px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
         },
       },
       colors: {

@@ -16,10 +16,10 @@ const StudentProfile = () => {
         setIssues(response.data.issuesWithFines);
         setUser(response.data.user);
         setError("");
-        setLoading(false);
-      } catch (err) {
-        setIssues([]);
+      } catch (err: any) {
+        console.error("Error fetching issues:", err.response);
         setError("An error occurred. Please try again later.");
+      } finally {
         setLoading(false);
       }
     };
@@ -32,14 +32,14 @@ const StudentProfile = () => {
   }
 
   if (error) {
-    return <div className="text-red-500">{error}</div>;
+    return <div className="text-gray-500">{error}</div>;
   }
 
   const totalFine = issues.reduce((acc, issue: any) => acc + issue.fine, 0);
 
   return (
-    <div className="p-8 max-w-5xl mx-auto bg-gradient-to-r from-teal-50 to-green-50 rounded-2xl shadow-xl space-y-8">
-      <h2 className="text-4xl font-bold text-gray-900 border-b-4 border-teal-500 pb-4">
+    <div className="p-8 max-w-5xl mx-auto bg-gray-100 rounded-2xl shadow-xl space-y-8">
+      <h2 className="text-4xl font-bold text-gray-900 border-b-2 border-gray-300 pb-4">
         Student Profile
       </h2>
       <div className="flex justify-between items-center">
@@ -47,12 +47,12 @@ const StudentProfile = () => {
           <h3 className="text-2xl font-semibold text-gray-900">
             {user.studentName}
           </h3>
-          <p className="text-gray-600 mb-1">{user.admissionNumber}</p>
-          <p className="text-gray-600 mb-1">{user.class?.className}</p>
-          <p className="text-gray-600 mb-1">{user.section.sectionName}</p>
+          <p className="text-gray-700 mb-1">{user.admissionNumber}</p>
+          <p className="text-gray-700 mb-1">{user.class?.className}</p>
+          <p className="text-gray-700 mb-1">{user.section.sectionName}</p>
         </div>
         <div className="text-right">
-          <p className="text-gray-600 text-lg font-medium">
+          <p className="text-gray-700 text-lg font-medium">
             Total Books Issued: {issues.length}
           </p>
         </div>
@@ -71,23 +71,22 @@ const StudentProfile = () => {
               Total Fine: ₹{totalFine.toFixed(2)}
             </div>
           </div>
-          <ul className="divide-y divide-gray-300  rounded-lg shadow-inner">
+          <ul className="divide-y divide-gray-300 rounded-lg shadow-inner">
             {issues.map((issue: any) => (
               <li
                 key={issue._id}
-                className="py-6 px-8 bg-gray-300 my-2 transition duration-300 ease-in-out rounded-lg"
+                className="py-6 px-8 bg-gray-200 my-2 transition duration-300 ease-in-out rounded-lg"
               >
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="text-xl font-semibold text-gray-800">
                       {issue.book.title}
                     </h3>
-                    <p className="text-gray-600 mb-1">{issue.book.author}</p>
-                    <p className="text-gray-600 mb-1">
-                      Issued on:{" "}
-                      {new Date(issue.issuedAt).toLocaleDateString()}
+                    <p className="text-gray-700 mb-1">{issue.book.author}</p>
+                    <p className="text-gray-700 mb-1">
+                      Issued on: {new Date(issue.issuedAt).toLocaleDateString()}
                     </p>
-                    <p className="text-gray-600 mb-1">
+                    <p className="text-gray-700 mb-1">
                       Due on: {new Date(issue.returnDate).toLocaleDateString()}
                     </p>
                     {issue.daysLate > 0 && (
@@ -97,7 +96,7 @@ const StudentProfile = () => {
                     )}
                   </div>
                   <div className="text-right">
-                    <p className="text-gray-600 text-lg font-medium">
+                    <p className="text-gray-700 text-lg font-medium">
                       Fine: ₹{issue.fine.toFixed(2)}
                     </p>
                   </div>

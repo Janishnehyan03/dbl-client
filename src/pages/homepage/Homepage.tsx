@@ -7,15 +7,9 @@ import MissionVision from "../../components/MissionVision";
 const HomePage: React.FC = () => {
   return (
     <main className="bg-gray-50 text-gray-800 h-screen overflow-auto">
-      {/* Hero Section */}
       <HeroSection />
-
-      {/* Recommended Books Carousel */}
       <NewArrivals />
-
-      {/* Categories Grid */}
       <CategoriesCard />
-
       <MissionVision />
     </main>
   );
