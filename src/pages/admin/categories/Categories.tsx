@@ -56,14 +56,14 @@ function CategoriesPage() {
   }, [showForm, isEditing]);
 
   return (
-    <div className="bg-teal-50 p-6 rounded-lg shadow-lg min-h-screen">
-      <h1 className="bg-teal-700 p-4 text-center text-white font-semibold rounded-t-lg">
+    <div className="bg-gray-50 p-6 rounded-lg shadow-lg min-h-screen">
+      <h1 className="bg-gray-700 p-4 text-center text-white font-semibold rounded-t-lg">
         Categories
       </h1>
 
       <button
         onClick={() => setShowForm(true)}
-        className="bg-teal-600 hover:bg-teal-700 transition-colors text-white p-3 rounded-md mt-3 ml-auto flex items-center space-x-2"
+        className="bg-gray-600 hover:bg-gray-700 transition-colors text-white p-3 rounded-md mt-3 ml-auto flex items-center space-x-2"
       >
         <Plus className="mr-1" />
         <span>New Category</span>
@@ -79,15 +79,15 @@ function CategoriesPage() {
       )}
 
       <div className="overflow-x-auto mt-4">
-        <div className="flex items-center p-2 bg-teal-200 rounded-md space-x-3 mb-4">
-          <label htmlFor="sort" className="text-sm font-medium text-teal-700">
+        <div className="flex items-center p-2 bg-gray-200 rounded-md space-x-3 mb-4">
+          <label htmlFor="sort" className="text-sm font-medium text-gray-700">
             Sort By:
           </label>
           <select
             id="sort"
             value={sortOption}
             onChange={handleSortChange}
-            className="border border-teal-300 rounded-md text-teal-700 p-1"
+            className="border border-gray-300 rounded-md text-gray-700 p-1"
           >
             <option value="a-z">A-Z</option>
             <option value="z-a">Z-A</option>
@@ -100,22 +100,22 @@ function CategoriesPage() {
             value={searchTerm}
             onChange={handleSearchChange}
             placeholder="Search categories..."
-            className="border border-teal-300 rounded-md text-teal-700 p-2 w-full"
+            className="border border-gray-300 rounded-md text-gray-700 p-2 w-full"
           />
         </div>
 
-        <table className="min-w-full bg-white rounded-md shadow-sm border border-teal-200 overflow-hidden">
-          <thead className="bg-teal-700 text-white text-sm">
+        <table className="min-w-full bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden">
+          <thead className="bg-gray-700 text-white text-sm">
             <tr>
               <th className="py-3 px-6 text-left">Category Name</th>
               <th className="py-3 px-6 text-left">Edit</th>
             </tr>
           </thead>
-          <tbody className="text-teal-700 text-sm">
+          <tbody className="text-gray-700 text-sm">
             {sortCategories(filteredCategories, sortOption).map((category) => (
               <tr
                 key={category._id}
-                className="border-b border-teal-200 hover:bg-teal-100 transition"
+                className="border-b border-gray-200 hover:bg-gray-100 transition"
               >
                 <td className="py-3 px-6 text-left whitespace-nowrap">
                   {category.categoryName}
@@ -127,7 +127,7 @@ function CategoriesPage() {
                       setIsEditing(true);
                       setShowForm(true); // Open the form for editing
                     }}
-                    className="text-teal-600 underline hover:text-teal-800 transition"
+                    className="text-gray-600 underline hover:text-gray-800 transition"
                   >
                     Edit
                   </button>

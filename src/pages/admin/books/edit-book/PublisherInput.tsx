@@ -163,13 +163,13 @@ const PublisherInput: React.FC<PublisherProps> = ({
           value={searchTerm}
           onChange={handleSearchChange}
           placeholder="Type to search publishers"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 mb-4"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 mb-4"
           autoComplete="off"
         />
         <button
           onClick={() => setShowModal(true)}
           type="button"
-          className="px-4 py-2 flex bg-teal-600 text-white rounded-md hover:bg-teal-700"
+          className="px-4 py-2 flex bg-gray-600 text-white rounded-md hover:bg-gray-700"
         >
           <Plus /> New Publisher
         </button>
@@ -225,7 +225,7 @@ const PublisherInput: React.FC<PublisherProps> = ({
               <button
                 type="submit"
                 onClick={handleSavePublisher}
-                className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700"
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
               >
                 Save
               </button>

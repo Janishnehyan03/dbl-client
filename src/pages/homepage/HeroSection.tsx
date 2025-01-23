@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 interface Book {
   title: string;
   author: string;
   cover: string;
+  id?: string;
 }
 
 const HeroSection: React.FC = () => {
@@ -68,9 +70,7 @@ const HeroSection: React.FC = () => {
             <p className="text-gray-600 mb-8 text-lg md:text-xl">
               Our most popular and trending <span className="font-semibold">On.Book</span> perfect. Not sure what to read next? Find your reading mood.
             </p>
-            <button className="bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition duration-300">
-              Explore Now
-            </button>
+          
           </div>
 
           {/* Books Section */}
@@ -79,32 +79,34 @@ const HeroSection: React.FC = () => {
               <div
                 key={book.title}
                 className={`w-full md:w-1/3 p-2 transform transition-transform duration-500 ease-in-out ${currentBooksIndex % 2 === 0
-                    ? "animate-fadeInUp"
-                    : "animate-fadeInDown"
+                  ? "animate-fadeInUp"
+                  : "animate-fadeInDown"
                   }`}
               >
-                <div
-                  className={`overflow-hidden ${index === 1 ? "rounded-b-full" : "rounded-t-full"
-                    }`}
-                >
-                  {index === 1 && (
-                    <div className="p-4 text-center text-sm ">
-                      <h3 className="font-semibold">{book.title}</h3>
-                      <p className="text-gray-600">{book.author}</p>
-                    </div>
-                  )}
-                  <img
-                    src={book.cover}
-                    alt={book.title}
-                    className="w-full h-64 object-cover"
-                  />
-                  {index !== 1 && (
-                    <div className="p-4 text-center text-sm ">
-                      <h3 className="font-semibold">{book.title}</h3>
-                      <p className="text-gray-600">{book.author}</p>
-                    </div>
-                  )}
-                </div>
+                <Link to={`/book/${book.id}`} className="block cursor-pointer">
+                  <div
+                    className={`overflow-hidden ${index === 1 ? "rounded-b-full" : "rounded-t-full"
+                      }`}
+                  >
+                    {index === 1 && (
+                      <div className="p-4 text-center text-sm ">
+                        <h3 className="font-semibold">{book.title}</h3>
+                        <p className="text-gray-600">{book.author}</p>
+                      </div>
+                    )}
+                    <img
+                      src={book.cover}
+                      alt={book.title}
+                      className="w-full h-64 object-cover"
+                    />
+                    {index !== 1 && (
+                      <div className="p-4 text-center text-sm ">
+                        <h3 className="font-semibold">{book.title}</h3>
+                        <p className="text-gray-600">{book.author}</p>
+                      </div>
+                    )}
+                  </div>
+                </Link>
               </div>
             ))}
           </div>

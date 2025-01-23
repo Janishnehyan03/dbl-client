@@ -1,17 +1,17 @@
 import { useQuery } from "@apollo/client";
-import { BookIcon, FileTextIcon, TagIcon, UserIcon } from "lucide-react";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { GET_BOOK_DETAILS } from "../graphql/queries/bookQuery";
+import BookDetailsSkeleton from "../components/BookDetailsSkeleton";
 
 interface Author {
-  id:string;
+  id: string;
   firstName: string;
   lastName: string;
 }
 
 interface Publisher {
-  name: string;
+  publisherName: string;
 }
 
 interface Language {
@@ -43,6 +43,8 @@ interface Book {
   category: Category;
   location: Location;
   issuedBy: any;
+  edition: string;
+  coverImage: string;
 }
 
 const BookDetailsPage: React.FC = () => {
@@ -51,177 +53,83 @@ const BookDetailsPage: React.FC = () => {
     variables: { id: bookId },
   });
 
-  if (loading) return <p className="text-center text-gray-600">Loading...</p>;
+  if (loading) return <BookDetailsSkeleton />;
   if (error)
     return <p className="text-center text-red-600">Error: {error.message}</p>;
 
   const book: Book = data.book;
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl">
-      <h1 className="text-4xl font-bold text-teal-800 text-center mb-6">
-        {book.title}
-      </h1>
-      {book.englishTitle && (
-        <h2 className="text-xl text-gray-600 italic text-center mb-6">
-          {book.englishTitle}
-        </h2>
-      )}
+    <div className="container mx-auto p-10 max-w-6xl bg-white shadow-xl rounded-lg border border-gray-200">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        {/* Book Image */}
+        <div className="flex justify-center md:justify-start">
+          <img
+            src={book.coverImage ? book.coverImage : "https://img.freepik.com/free-photo/red-hardcover-book-front-cover_1101-833.jpg?ga=GA1.1.693543164.1727334307&semt=ais_incoming"}
+            alt={book.title}
+            className="rounded-lg shadow-lg w-full max-w-sm object-cover"
+          />
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Column 1 */}
-        <div className="space-y-4 text-lg text-gray-800">
-          <div className="flex items-center">
-            <UserIcon className="w-6 h-6 text-teal-600 mr-2" />
-            <span className="font-semibold">Authors:</span>
-            <span className="ml-2">
-              {book.authors.map((author, index) => (
+        {/* Book Details */}
+        <div className="md:col-span-2 space-y-6">
+          <h1 className="text-4xl font-bold text-gray-900">{book.title}</h1>
+          {book.englishTitle && (
+            <h2 className="text-xl text-gray-500 italic">{book.englishTitle}</h2>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg text-gray-700">
+            <div>
+              <p><span className="font-semibold text-gray-900">Author(s):</span> {book.authors.map((author, index) => (
                 <React.Fragment key={index}>
-                  <Link
-                    to={`/author/${author.id}`}
-                    className="text-teal-600 hover:underline"
-                  >
+                  <Link to={`/author/${author.id}`} className="text-gray-700 hover:underline">
                     {author.firstName} {author.lastName}
                   </Link>
-                  {index < book.authors.length - 1 && ", "}
+                  {index < book.authors.length - 1 && ', '}
                 </React.Fragment>
-              ))}
-            </span>
-          </div>
+              ))}</p>
+              <p><span className="font-semibold text-gray-900">Category:</span> {book.category?.categoryName}</p>
+              <p><span className="font-semibold text-gray-900">Language:</span> {book.language?.languageName}</p>
+              <p><span className="font-semibold text-gray-900">Location:</span> {book.location?.locationName}</p>
+            </div>
 
-          <div className="flex items-center">
-            <BookIcon className="w-6 h-6 text-teal-600 mr-2" />
-            <span className="font-semibold">Category:</span>
-            <span className="ml-2">{book.category?.categoryName}</span>
-          </div>
-
-          <div className="flex items-center">
-            <FileTextIcon className="w-6 h-6 text-teal-600 mr-2" />
-            <span className="font-semibold">Location:</span>
-            <span className="ml-2">{book.location?.locationName}</span>
-          </div>
-
-          <div className="flex items-center">
-            <TagIcon className="w-6 h-6 text-teal-600 mr-2" />
-            <span className="font-semibold">Language:</span>
-            <span className="ml-2">{book.language?.languageName}</span>
-          </div>
-        </div>
-
-        {/* Column 2 */}
-        <div className="space-y-4 text-lg text-gray-800">
-          <div className="flex items-center">
-            <UserIcon className="w-6 h-6 text-teal-600 mr-2" />
-            <span className="font-semibold">Publishers:</span>
-            <span className="ml-2">
-              {book.publishers
-                .map((publisher: any) => publisher?.publisherName)
-                .join(", ")}
-            </span>
-          </div>
-
-          <div className="flex items-center">
-            <TagIcon className="w-6 h-6 text-teal-600 mr-2" />
-            <span className="font-semibold">ISBN:</span>
-            <span className="ml-2">{book.ISBN}</span>
-          </div>
-
-          <div className="flex items-center">
-            <FileTextIcon className="w-6 h-6 text-teal-600 mr-2" />
-            <span className="font-semibold">Pages:</span>
-            <span className="ml-2">{book.numberOfPages}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Additional Details */}
-      <div className="mt-8 space-y-4 text-lg text-gray-800">
-        <div className="flex items-center">
-          <span className="font-semibold">Status:</span>
-          <span
-            className={`ml-2 ${book.published ? "text-green-600" : "text-red-600"}`}
-          >
-            {book.published ? "Published" : "Not Published"}
-          </span>
-        </div>
-
-        <div>
-          <span className="font-semibold">Description:</span>
-          <p className="ml-2 text-gray-700">{book.description}</p>
-        </div>
-
-        <div>
-          <span className="font-semibold">Tags:</span>
-          <div className="ml-2 flex flex-wrap gap-2 mt-1">
-            {book.tags.map((tag: string, index: number) => (
-              <Link to={`/tag/${tag}`}>
-                <span
-                  key={index}
-                  className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-xs font-medium shadow-sm hover:bg-gray-300"
-                >
-                  #{tag}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-        {book.issuedBy && (
-          <div className="bg-gray-100 p-6 rounded-lg shadow-md mt-6">
-            <h2 className="text-2xl font-semibold text-teal-800 mb-4">
-              Issued By
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {book.issuedBy.studentName && (
-                <div className="flex items-center">
-                  <span className="font-semibold text-gray-700">
-                    Student Name:
-                  </span>
-                  <span className="ml-2 text-gray-700">
-                    {book.issuedBy.studentName}
-                  </span>
-                </div>
-              )}
-              {book.issuedBy.teacherName && (
-                <div className="flex items-center">
-                  <span className="font-semibold text-gray-700">
-                    Teacher Name:
-                  </span>
-                  <span className="ml-2 text-gray-700">
-                    {book.issuedBy.teacherName}
-                  </span>
-                </div>
-              )}
-              {book.issuedBy.class?.className && (
-                <div className="flex items-center">
-                  <span className="font-semibold text-gray-700">Class:</span>
-                  <span className="ml-2 text-gray-700">
-                    {book.issuedBy.class.className}
-                  </span>
-                </div>
-              )}
-              {book.issuedBy.section?.sectionName && (
-                <div className="flex items-center">
-                  <span className="font-semibold text-gray-700">Section:</span>
-                  <span className="ml-2 text-gray-700">
-                    {book.issuedBy.section.sectionName}
-                  </span>
-                </div>
-              )}
-
-              {book.issuedBy.admissionNumber && (
-                <div className="flex items-center">
-                  <span className="font-semibold text-gray-700">
-                    Admission Number:
-                  </span>
-                  <span className="ml-2 text-gray-700">
-                    {book.issuedBy.admissionNumber}
-                  </span>
-                </div>
-              )}
+            <div>
+              <p><span className="font-semibold text-gray-900">Publisher(s):</span> {book.publishers.map(p => p.publisherName).join(', ')}</p>
+              <p><span className="font-semibold text-gray-900">ISBN:</span> {book.ISBN}</p>
+              <p><span className="font-semibold text-gray-900">Pages:</span> {book.numberOfPages}</p>
+              <p><span className="font-semibold text-gray-900">Edition:</span> {book.edition} Edition</p>
             </div>
           </div>
-        )}
+
+          <div>
+            <h3 className="text-xl font-semibold text-gray-900">Description</h3>
+            <p className="text-gray-600 leading-relaxed">{book.description}</p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold text-gray-900">Tags</h3>
+            <div className="flex flex-wrap gap-3 mt-2">
+              {book.tags.map((tag, index) => (
+                <Link to={`/tag/${tag}`} key={index} className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium hover:bg-gray-200">
+                  #{tag}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
+
+      {book.issuedBy && (
+        <div className="bg-gray-100 p-8 rounded-lg shadow-md mt-10">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Issued By</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {book.issuedBy.studentName && <p><span className="font-semibold text-gray-900">Student Name:</span> {book.issuedBy.studentName}</p>}
+            {book.issuedBy.teacherName && <p><span className="font-semibold text-gray-900">Teacher Name:</span> {book.issuedBy.teacherName}</p>}
+            {book.issuedBy.class?.className && <p><span className="font-semibold text-gray-900">Class:</span> {book.issuedBy.class.className}</p>}
+            {book.issuedBy.section?.sectionName && <p><span className="font-semibold text-gray-900">Section:</span> {book.issuedBy.section.sectionName}</p>}
+            {book.issuedBy.admissionNumber && <p><span className="font-semibold text-gray-900">Admission Number:</span> {book.issuedBy.admissionNumber}</p>}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

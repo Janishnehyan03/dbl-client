@@ -116,7 +116,7 @@ const CategoriesCard: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {!loading &&
             !error &&
-            filteredBooks.map((book: any, i) => (
+            filteredBooks.slice(0,15).map((book: any, i) => (
               <Link to={`/book/${book.id}`} key={i}>
                 <div className="flex flex-col md:flex-row h-full border border-gray-200 bg-white rounded-lg overflow-hidden hover:border-gray-300 focus:outline-none focus:ring focus:ring-blue-300 transition-colors duration-200">
                   {/* Book Details */}

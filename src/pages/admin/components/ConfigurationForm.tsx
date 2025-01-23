@@ -70,7 +70,7 @@ const ConfigurationForm: React.FC<Props> = ({ onSubmit, initialData }) => {
           className="w-full p-2 border rounded"
         />
       </div>
-      <button type="submit" className="w-full py-2 bg-teal-500 text-white rounded">
+      <button type="submit" className="w-full py-2 bg-gray-500 text-white rounded">
         Save Configuration
       </button>
     </form>

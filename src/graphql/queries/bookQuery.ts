@@ -41,6 +41,7 @@ export const GET_BOOK_DETAILS = gql`
       price
       published
       tags
+      edition
       coverImage
       issuedBy {
         studentName

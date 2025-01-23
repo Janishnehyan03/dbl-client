@@ -7,7 +7,7 @@ import ConfigurationPage from "../pages/admin/configurations/ConfigurationPage";
 import IssueBook from "../pages/admin/issues/IssueReturnSection";
 import LanguageLocationPage from "../pages/admin/language-location/LanguageLocation";
 import Publishers from "../pages/admin/publishers/Publishers";
-import DailyQuotesAdmin from "../pages/admin/quotes/DailyQuotePage";
+import DailyQuotesAdmin from "../pages/admin/quotes/DailyQuotePageAdmin";
 import SectionPage from "../pages/admin/sections/SectionPage";
 import StudentsPage from "../pages/admin/students/StudentsPage";
 import StudentProfile from "../pages/user/StudentProfile";
@@ -43,7 +43,7 @@ const AdminRoutes = [
     element: <AuthorsPage />,
   },
   {
-    path: "/categories",
+    path: "/categories/admin",
     element: <Categories />,
   },
   {

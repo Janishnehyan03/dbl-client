@@ -88,8 +88,8 @@ const Sidebar: React.FC = () => {
               to={item.path}
               key={index}
               className={`flex items-center p-3 my-2 rounded-md cursor-pointer transition-colors duration-200 ${location.pathname === item.path
-                  ? "bg-teal-600 text-white"
-                  : "text-gray-800 hover:bg-teal-500 hover:bg-opacity-20"
+                  ? "bg-gray-600 text-white"
+                  : "text-gray-800 hover:bg-gray-500 hover:bg-opacity-20"
                 }`}
             >
               <div

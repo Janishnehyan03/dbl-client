@@ -104,10 +104,10 @@ const LanguageLocationPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row justify-between p-6 bg-teal-50 rounded-lg shadow-lg min-h-screen">
+    <div className="flex flex-col md:flex-row justify-between p-6 bg-gray-50 rounded-lg shadow-lg min-h-screen">
       {/* Languages Section */}
       <div className="w-full md:w-1/2 p-4">
-        <h2 className="text-teal-700 text-lg font-semibold mb-4">Languages</h2>
+        <h2 className="text-gray-700 text-lg font-semibold mb-4">Languages</h2>
         <form onSubmit={handleLanguageSubmit} className="mb-4">
           <input
             type="text"
@@ -115,34 +115,34 @@ const LanguageLocationPage = () => {
             onChange={(e) => setLanguageName(e.target.value)}
             placeholder="Language Name"
             required
-            className="border border-teal-300 p-2 rounded-md w-full mb-2"
+            className="border border-gray-300 p-2 rounded-md w-full mb-2"
           />
           <button
             type="submit"
-            className="bg-teal-600 text-white p-2 rounded-md hover:bg-teal-700 transition"
+            className="bg-gray-600 text-white p-2 rounded-md hover:bg-gray-700 transition"
           >
             {editingLanguageId ? "Update Language" : "Add Language"}
           </button>
         </form>
 
-        <table className="min-w-full bg-white rounded-md shadow-sm border border-teal-200 overflow-hidden">
-          <thead className="bg-teal-700 text-white text-sm">
+        <table className="min-w-full bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden">
+          <thead className="bg-gray-700 text-white text-sm">
             <tr>
               <th className="py-3 px-6 text-left">Language Name</th>
               <th className="py-3 px-6 text-left">Actions</th>
             </tr>
           </thead>
-          <tbody className="text-teal-700 text-sm">
+          <tbody className="text-gray-700 text-sm">
             {languages.map((language: any) => (
               <tr
                 key={language._id}
-                className="border-b border-teal-200 hover:bg-teal-100 transition"
+                className="border-b border-gray-200 hover:bg-gray-100 transition"
               >
                 <td className="py-3 px-6">{language.languageName}</td>
                 <td className="py-3 px-6">
                   <button
                     onClick={() => editLanguage(language)}
-                    className="text-teal-600 underline"
+                    className="text-gray-600 underline"
                   >
                     Edit
                   </button>
@@ -161,7 +161,7 @@ const LanguageLocationPage = () => {
 
       {/* Locations Section */}
       <div className="w-full md:w-1/2 p-4">
-        <h2 className="text-teal-700 text-lg font-semibold mb-4">Locations</h2>
+        <h2 className="text-gray-700 text-lg font-semibold mb-4">Locations</h2>
         <form onSubmit={handleLocationSubmit} className="mb-4">
           <input
             type="text"
@@ -169,34 +169,34 @@ const LanguageLocationPage = () => {
             onChange={(e) => setLocationName(e.target.value)}
             placeholder="Location Name"
             required
-            className="border border-teal-300 p-2 rounded-md w-full mb-2"
+            className="border border-gray-300 p-2 rounded-md w-full mb-2"
           />
           <button
             type="submit"
-            className="bg-teal-600 text-white p-2 rounded-md hover:bg-teal-700 transition"
+            className="bg-gray-600 text-white p-2 rounded-md hover:bg-gray-700 transition"
           >
             {editingLocationId ? "Update Location" : "Add Location"}
           </button>
         </form>
 
-        <table className="min-w-full bg-white rounded-md shadow-sm border border-teal-200 overflow-hidden">
-          <thead className="bg-teal-700 text-white text-sm">
+        <table className="min-w-full bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden">
+          <thead className="bg-gray-700 text-white text-sm">
             <tr>
               <th className="py-3 px-6 text-left">Location Name</th>
               <th className="py-3 px-6 text-left">Actions</th>
             </tr>
           </thead>
-          <tbody className="text-teal-700 text-sm">
+          <tbody className="text-gray-700 text-sm">
             {locations.map((location: any) => (
               <tr
                 key={location._id}
-                className="border-b border-teal-200 hover:bg-teal-100 transition"
+                className="border-b border-gray-200 hover:bg-gray-100 transition"
               >
                 <td className="py-3 px-6">{location.locationName}</td>
                 <td className="py-3 px-6">
                   <button
                     onClick={() => editLocation(location)}
-                    className="text-teal-600 underline"
+                    className="text-gray-600 underline"
                   >
                     Edit
                   </button>

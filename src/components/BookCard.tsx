@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 function BookCard({ book }: { book: any }) {
   // Array of placeholder images
@@ -8,6 +9,7 @@ function BookCard({ book }: { book: any }) {
 
   return (
     <div className="max-w-sm overflow-hidden">
+      <Link to={`/book/${book.id}`} className="block cursor-pointer">
       {/* Book Cover */}
       <img
         src={images[Math.floor(Math.random() * images.length)]}
@@ -27,6 +29,7 @@ function BookCard({ book }: { book: any }) {
         </p>
 
       </div>
+      </Link>
     </div>
   );
 }

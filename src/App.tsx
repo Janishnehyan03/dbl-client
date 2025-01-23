@@ -13,6 +13,9 @@ import ProtectedRoutes from "./utils/ProtectedRoute";
 import { ConfigurationProvider } from "./utils/contexts/configurationContext";
 import BooksByTagPage from "./pages/BooksByTagPage";
 import BooksByAuthorPage from "./pages/BooksByAuthor";
+import CategoriesPage from "./pages/user/Categories";
+import AnnouncementsPage from "./pages/user/Announcements";
+import ContactUsPage from "./pages/user/ContactUs";
 
 export default function App() {
   return (
@@ -27,6 +30,9 @@ export default function App() {
           <Route path="/book/:bookId" element={<BookDetailsPage />} />
           <Route path="/tag/:tag" element={<BooksByTagPage />} />
           <Route path="/author/:author" element={<BooksByAuthorPage/>} />
+          <Route path="/categories" element={<CategoriesPage/>} />
+          <Route path="/announcements" element={<AnnouncementsPage/>} />
+          <Route path="/contact-us" element={<ContactUsPage/>} />
 
         </Route>
         <Route path="/login" element={<LoginPage />} />

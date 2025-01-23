@@ -43,14 +43,14 @@ function Publishers() {
 
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
-      <h1 className="bg-teal-700 p-3 text-center text-white font-bold text-lg">
+      <h1 className="bg-gray-700 p-3 text-center text-white font-bold text-lg">
         Publishers
       </h1>
 
       {!showForm ? (
         <button
           onClick={() => setShowForm(true)}
-          className="bg-teal-600 text-white font-medium p-2 px-4 rounded-md flex items-center mt-4 ml-auto transition hover:bg-teal-500"
+          className="bg-gray-600 text-white font-medium p-2 px-4 rounded-md flex items-center mt-4 ml-auto transition hover:bg-gray-500"
         >
           <Plus size={18} className="mr-2" /> New Publisher
         </button>
@@ -84,7 +84,7 @@ function Publishers() {
             id="sort"
             value={sortOption}
             onChange={handleSortChange}
-            className="text-gray-700 border border-gray-400 rounded-md p-1 focus:outline-none focus:ring focus:ring-teal-400"
+            className="text-gray-700 border border-gray-400 rounded-md p-1 focus:outline-none focus:ring focus:ring-gray-400"
           >
             <option value="a-z">A-Z</option>
             <option value="z-a">Z-A</option>
@@ -93,7 +93,7 @@ function Publishers() {
 
         {filteredPublishers.length > 0 ? (
           <table className="min-w-full bg-white border border-gray-300 shadow-lg rounded-md overflow-hidden">
-            <thead className="bg-teal-600">
+            <thead className="bg-gray-600">
               <tr className="text-white uppercase text-xs tracking-wide">
                 <th className="py-3 px-4 text-left">Name</th>
                 <th className="py-3 px-4 text-left">Place</th>
@@ -111,7 +111,7 @@ function Publishers() {
                   key={publisher._id}
                   className={`${
                     idx % 2 === 0 ? "bg-gray-50" : "bg-gray-100"
-                  } border-b border-gray-200 hover:bg-teal-50 transition`}
+                  } border-b border-gray-200 hover:bg-gray-50 transition`}
                 >
                   <td className="py-2 px-4 whitespace-nowrap">{publisher.publisherName}</td>
                   <td className="py-2 px-4">{publisher.address?.place}</td>
@@ -127,7 +127,7 @@ function Publishers() {
                         setIsEditing(true);
                         setShowForm(true);
                       }}
-                      className="text-teal-600 font-semibold hover:text-teal-800 transition"
+                      className="text-gray-600 font-semibold hover:text-gray-800 transition"
                     >
                       Edit
                     </button>

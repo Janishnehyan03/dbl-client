@@ -104,10 +104,10 @@ const ClassAndSection = () => {
   }, []);
 
   return (
-    <div className="p-6 bg-teal-50 rounded-lg shadow-lg min-h-screen flex flex-wrap justify-between">
+    <div className="p-6 bg-gray-50 rounded-lg shadow-lg min-h-screen flex flex-wrap justify-between">
   {/* Sections Section */}
   <div className="w-full md:w-1/2 pr-4 mb-6 md:mb-0">
-    <h2 className="text-teal-700 text-2xl font-semibold mb-4">Sections</h2>
+    <h2 className="text-gray-700 text-2xl font-semibold mb-4">Sections</h2>
     <form onSubmit={handleSectionSubmit} className="mb-4">
       <input
         type="text"
@@ -115,34 +115,34 @@ const ClassAndSection = () => {
         onChange={(e) => setSectionName(e.target.value)}
         placeholder="Section Name"
         required
-        className="border border-teal-300 p-3 rounded-md w-full mb-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+        className="border border-gray-300 p-3 rounded-md w-full mb-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
       />
       <button
         type="submit"
-        className="bg-teal-600 text-white p-3 rounded-md hover:bg-teal-700 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-500"
+        className="bg-gray-600 text-white p-3 rounded-md hover:bg-gray-700 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500"
       >
         {editingSectionId ? "Update Section" : "Add Section"}
       </button>
     </form>
 
-    <table className="min-w-full bg-white rounded-lg shadow-md border border-teal-200 overflow-hidden mb-8">
-      <thead className="bg-teal-700 text-white text-sm">
+    <table className="min-w-full bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden mb-8">
+      <thead className="bg-gray-700 text-white text-sm">
         <tr>
           <th className="py-3 px-6 text-left">Section Name</th>
           <th className="py-3 px-6 text-left">Actions</th>
         </tr>
       </thead>
-      <tbody className="text-teal-700 text-sm">
+      <tbody className="text-gray-700 text-sm">
         {sections.map((section) => (
           <tr
             key={section._id}
-            className="border-b border-teal-200 hover:bg-teal-100 transition duration-150"
+            className="border-b border-gray-200 hover:bg-gray-100 transition duration-150"
           >
             <td className="py-3 px-6">{section.sectionName}</td>
             <td className="py-3 px-6 flex space-x-4">
               <button
                 onClick={() => editSection(section)}
-                className="text-teal-600 hover:text-teal-800 transition"
+                className="text-gray-600 hover:text-gray-800 transition"
               >
                 Edit
               </button>
@@ -161,7 +161,7 @@ const ClassAndSection = () => {
 
   {/* Classes Section */}
   <div className="w-full md:w-1/2 pl-4">
-    <h2 className="text-teal-700 text-2xl font-semibold mb-4">Classes</h2>
+    <h2 className="text-gray-700 text-2xl font-semibold mb-4">Classes</h2>
     <form onSubmit={handleClassSubmit} className="mb-4">
       <input
         type="text"
@@ -169,34 +169,34 @@ const ClassAndSection = () => {
         onChange={(e) => setClassName(e.target.value)}
         placeholder="Class Name"
         required
-        className="border border-teal-300 p-3 rounded-md w-full mb-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+        className="border border-gray-300 p-3 rounded-md w-full mb-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
       />
       <button
         type="submit"
-        className="bg-teal-600 text-white p-3 rounded-md hover:bg-teal-700 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-500"
+        className="bg-gray-600 text-white p-3 rounded-md hover:bg-gray-700 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500"
       >
         {editingClassId ? "Update Class" : "Add Class"}
       </button>
     </form>
 
-    <table className="min-w-full bg-white rounded-lg shadow-md border border-teal-200 overflow-hidden">
-      <thead className="bg-teal-700 text-white text-sm">
+    <table className="min-w-full bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+      <thead className="bg-gray-700 text-white text-sm">
         <tr>
           <th className="py-3 px-6 text-left">Class Name</th>
           <th className="py-3 px-6 text-left">Actions</th>
         </tr>
       </thead>
-      <tbody className="text-teal-700 text-sm">
+      <tbody className="text-gray-700 text-sm">
         {classes.map((classItem) => (
           <tr
             key={classItem._id}
-            className="border-b border-teal-200 hover:bg-teal-100 transition duration-150"
+            className="border-b border-gray-200 hover:bg-gray-100 transition duration-150"
           >
             <td className="py-3 px-6">{classItem.className}</td>
             <td className="py-3 px-6 flex space-x-4">
               <button
                 onClick={() => editClass(classItem)}
-                className="text-teal-600 hover:text-teal-800 transition"
+                className="text-gray-600 hover:text-gray-800 transition"
               >
                 Edit
               </button>
