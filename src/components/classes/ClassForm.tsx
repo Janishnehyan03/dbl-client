@@ -13,7 +13,7 @@ export const ClassForm = ({
   onSubmit,
   onCancel,
 }: ClassFormProps) => {
-  const [formData, setFormData] = useState<IClass>(
+  const [formData, setFormData] = useState<any>(
     initialData || {
       name: "",
       section: {

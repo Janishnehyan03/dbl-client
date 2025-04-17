@@ -1,15 +1,9 @@
-import {
-    Book,
-    Clock,
-    Download,
-    Filter,
-    Search
-} from "lucide-react";
+import { Book, Clock, Download, Filter, Search } from "lucide-react";
 import React, { useState } from "react";
 
 const ReportsPage: React.FC = () => {
   // Sample data for reports
-  const [reports, setReports] = useState([
+  const reports = [
     {
       id: 1,
       bookTitle: "The Great Gatsby",
@@ -37,7 +31,7 @@ const ReportsPage: React.FC = () => {
       status: "Returned",
       fine: 0,
     },
-  ]);
+  ];
 
   // State for filters
   const [filters, setFilters] = useState({
@@ -47,25 +41,33 @@ const ReportsPage: React.FC = () => {
   });
 
   // Handle filter changes
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
   // Filtered reports based on filters
-  const filteredReports = reports.filter((report) => {
-    const matchesSearchQuery = report.bookTitle.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
+  const filteredReports = reports.filter((report: any) => {
+    const matchesSearchQuery =
+      report.bookTitle
+        .toLowerCase()
+        .includes(filters.searchQuery.toLowerCase()) ||
       report.borrower.toLowerCase().includes(filters.searchQuery.toLowerCase());
 
-    const matchesStatus = filters.status === "all" || report.status === filters.status;
+    const matchesStatus =
+      filters.status === "all" || report.status === filters.status;
 
     return matchesSearchQuery && matchesStatus;
   });
 
   // Sort reports
-  const sortedReports = filteredReports.sort((a, b) => {
+  const sortedReports = filteredReports.sort((a: any, b: any) => {
     if (filters.sortBy === "borrowedDate") {
-      return new Date(a.borrowedDate).getTime() - new Date(b.borrowedDate).getTime();
+      return (
+        new Date(a.borrowedDate).getTime() - new Date(b.borrowedDate).getTime()
+      );
     } else if (filters.sortBy === "dueDate") {
       return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
     } else if (filters.sortBy === "fine") {
@@ -95,7 +97,7 @@ const ReportsPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Search */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+              <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
                 <Search className="mr-2 text-indigo-600" size={20} />
                 Search
               </label>
@@ -111,7 +113,7 @@ const ReportsPage: React.FC = () => {
 
             {/* Status Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+              <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
                 <Filter className="mr-2 text-indigo-600" size={20} />
                 Status
               </label>
@@ -130,7 +132,7 @@ const ReportsPage: React.FC = () => {
 
             {/* Sort By */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+              <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
                 <Clock className="mr-2 text-indigo-600" size={20} />
                 Sort By
               </label>
@@ -153,21 +155,44 @@ const ReportsPage: React.FC = () => {
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Book Title</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Borrower</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Borrowed Date</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Due Date</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Fine ($)</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
+                  Book Title
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
+                  Borrower
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
+                  Borrowed Date
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
+                  Due Date
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
+                  Fine ($)
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {sortedReports.map((report) => (
-                <tr key={report.id} className="hover:bg-gray-50 transition-all duration-200">
-                  <td className="px-6 py-4 text-sm text-gray-700">{report.bookTitle}</td>
-                  <td className="px-6 py-4 text-sm text-gray-700">{report.borrower}</td>
-                  <td className="px-6 py-4 text-sm text-gray-700">{report.borrowedDate}</td>
-                  <td className="px-6 py-4 text-sm text-gray-700">{report.dueDate}</td>
+                <tr
+                  key={report.id}
+                  className="hover:bg-gray-50 transition-all duration-200"
+                >
+                  <td className="px-6 py-4 text-sm text-gray-700">
+                    {report.bookTitle}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-700">
+                    {report.borrower}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-700">
+                    {report.borrowedDate}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-700">
+                    {report.dueDate}
+                  </td>
                   <td className="px-6 py-4 text-sm">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -181,7 +206,9 @@ const ReportsPage: React.FC = () => {
                       {report.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">${report.fine.toFixed(2)}</td>
+                  <td className="px-6 py-4 text-sm text-gray-700">
+                    ${report.fine.toFixed(2)}
+                  </td>
                 </tr>
               ))}
             </tbody>

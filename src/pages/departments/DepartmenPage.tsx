@@ -1,19 +1,17 @@
-import { useState, useEffect } from "react";
-import { IDepartment, Section } from "../../utils/types";
-import {
-  getDepartments,
-  getSections,
-  createDepartment,
-  updateDepartment,
-  deleteDepartment,
-} from "../../utils/services/departmentService";
-import { DepartmentTable } from "../../components/departments/DepartmentTable";
+import { useEffect, useState } from "react";
 import { Modal } from "../../components/classes/ClassModal";
 import { DepartmentForm } from "../../components/departments/DepartmentForm";
+import { DepartmentTable } from "../../components/departments/DepartmentTable";
+import {
+  createDepartment,
+  deleteDepartment,
+  getDepartments,
+  updateDepartment
+} from "../../utils/services/departmentService";
+import { IDepartment } from "../../utils/types";
 
 export const DepartmentsPage = () => {
   const [departments, setDepartments] = useState<IDepartment[]>([]);
-  const [sections, setSections] = useState<Section[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentDepartment, setCurrentDepartment] =
@@ -24,12 +22,9 @@ export const DepartmentsPage = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const [departmentsData, sectionsData] = await Promise.all([
-          getDepartments(),
-          getSections(),
-        ]);
+        const [departmentsData] = await Promise.all([getDepartments()]);
         setDepartments(departmentsData);
-        setSections(sectionsData);
+        // setSections(sectionsData);
         setIsLoading(false);
       } catch (err) {
         setError("Failed to fetch data");
@@ -200,7 +195,7 @@ export const DepartmentsPage = () => {
       ) : (
         <DepartmentTable
           departments={departments}
-          sections={sections}
+          // sections={sections}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />

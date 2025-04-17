@@ -52,7 +52,7 @@ const PermissionsTable: React.FC<PermissionsTableProps> = ({
             </thead>
             <tbody>
               {permissions.map((permission) => (
-                <tr key={permission.id} className="hover:bg-gray-50">
+                <tr key={permission._id} className="hover:bg-gray-50">
                   <td className="px-4 py-2 text-sm text-gray-600 border-b">
                     {permission.name}
                   </td>
@@ -67,7 +67,7 @@ const PermissionsTable: React.FC<PermissionsTableProps> = ({
                       <Edit size={18} />
                     </button>
                     <button
-                      onClick={() => onDelete(permission.id)}
+                      onClick={() => onDelete(permission._id)}
                       className="text-red-600 hover:text-red-800"
                     >
                       <Trash size={18} />

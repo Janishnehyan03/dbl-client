@@ -99,7 +99,7 @@ export interface Section {
   _id: string;
   name: string;
   description?: string;
-  hasDepartments: boolean;
+  hasDepartments?: boolean;
 }
 
 export interface IClass {

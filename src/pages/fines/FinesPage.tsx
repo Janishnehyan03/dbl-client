@@ -45,6 +45,8 @@ const FinesPage: React.FC = () => {
     fine.issueDate.startsWith(filterMonth)
   );
 
+  console.log("Filtered Fines:", loading);
+
   // Calculate payment collection summary
   const paymentSummary = filteredFines.reduce(
     (acc, fine) => {

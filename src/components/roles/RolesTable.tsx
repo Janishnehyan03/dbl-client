@@ -52,7 +52,7 @@ const RolesTable: React.FC<RolesTableProps> = ({
             </thead>
             <tbody>
               {roles.map((role) => (
-                <tr key={role.id} className="hover:bg-gray-50">
+                <tr key={role._id} className="hover:bg-gray-50">
                   <td className="px-4 py-2 text-sm text-gray-600 border-b">
                     {role.name}
                   </td>
@@ -67,7 +67,7 @@ const RolesTable: React.FC<RolesTableProps> = ({
                       <Edit size={18} />
                     </button>
                     <button
-                      onClick={() => onDelete(role.id)}
+                      onClick={() => onDelete(role._id)}
                       className="text-red-600 hover:text-red-800"
                     >
                       <Trash size={18} />
