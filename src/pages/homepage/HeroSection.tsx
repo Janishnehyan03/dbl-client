@@ -1,119 +1,127 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { SearchIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
-interface Book {
-  title: string;
-  author: string;
-  cover: string;
-  id?: string;
-}
+function App() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [bookOrder, setBookOrder] = useState([0, 1, 2, 3]);
 
-const HeroSection: React.FC = () => {
-  const booksSet: Book[][] = [
-    [
-      {
-        title: "1984",
-        author: "George Orwell",
-        cover: "https://images.unsplash.com/photo-1735656244152-5d0ad782f71d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8",
-      },
-      {
-        title: "To Kill a Mockingbird",
-        author: "Harper Lee",
-        cover: "https://images.unsplash.com/photo-1735287367310-2648443f086f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D",
-      },
-      {
-        title: "The Great Gatsby",
-        author: "F. Scott Fitzgerald",
-        cover: "https://images.unsplash.com/photo-1735408928209-16a5d6ba8ccf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNXx8fGVufDB8fHx8fA%3D%3D",
-      },
-    ],
-    [
-      {
-        title: "Moby Dick",
-        author: "Herman Melville",
-        cover: "https://images.unsplash.com/photo-1735597821463-05f8cbd08fca?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyM3x8fGVufDB8fHx8fA%3D%3D",
-      },
-      {
-        title: "Pride and Prejudice",
-        author: "Jane Austen",
-        cover: "https://plus.unsplash.com/premium_photo-1668447598676-30bbd44792c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0NHx8fGVufDB8fHx8fA%3D%3D",
-      },
-      {
-        title: "War and Peace",
-        author: "Leo Tolstoy",
-        cover: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGJvb2slMjBjb3ZlcnxlbnwwfHwwfHx8",
-      },
-    ],
+  const books = [
+    {
+      title: "The Great Gatsby",
+      authorName: "F. Scott Fitzgerald",
+      image:
+        "https://images.unsplash.com/photo-1629992101753-56d196c8aabb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Ym9vayUyMGNvdmVyfGVufDB8fDB8fHww",
+    },
+    {
+      title: "To Kill a Mockingbird",
+      authorName: "Harper Lee",
+      image:
+        "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Ym9vayUyMGNvdmVyfGVufDB8fDB8fHww",
+    },
+    {
+      title: "1984",
+      authorName: "George Orwell",
+      image:
+        "https://images.unsplash.com/photo-1641154748135-8032a61a3f80?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJvb2slMjBjb3ZlcnxlbnwwfHwwfHx8MA%3D%3D",
+    },
+    {
+      title: "The Catcher in the Rye",
+      authorName: "J.D. Salinger",
+      image:
+        "https://images.unsplash.com/photo-1621351183012-e2f9972dd9bf?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGJvb2slMjBjb3ZlcnxlbnwwfHwwfHx8MA%3D%3D",
+    },
   ];
 
-  const [currentBooksIndex, setCurrentBooksIndex] = useState(0);
-
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentBooksIndex((prevIndex) => (prevIndex + 1) % booksSet.length);
-    }, 8000); // Change books every 8 seconds
+    const cycleInterval = setInterval(() => {
+      setBookOrder((prevOrder: any) => {
+        const newOrder = [...prevOrder];
+        const topBook = newOrder.shift();
+        newOrder.push(topBook);
+        return newOrder;
+      });
+    }, 5000);
 
-    return () => clearInterval(interval); // Cleanup on component unmount
-  }, [booksSet.length]);
-
-  const currentBooks = booksSet[currentBooksIndex];
+    return () => clearInterval(cycleInterval);
+  }, []);
 
   return (
-    <div className="font-sans min-h-screen flex items-center justify-center">
-      <main className="container mx-auto px-6 md:px-12 lg:px-24 py-16">
-        <section className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-16">
-          {/* Text Section */}
-          <div className="md:w-1/2 text-center md:text-left">
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-gray-800">
-              Find Your Next Book
-            </h2>
-            <p className="text-gray-600 mb-8 text-lg md:text-xl">
-              Our most popular and trending <span className="font-semibold">On.Book</span> perfect. Not sure what to read next? Find your reading mood.
-            </p>
-          
-          </div>
-
-          {/* Books Section */}
-          <div className="md:w-1/2 flex space-x-4 overflow-hidden">
-            {currentBooks.map((book, index) => (
-              <div
-                key={book.title}
-                className={`w-full md:w-1/3 p-2 transform transition-transform duration-500 ease-in-out ${currentBooksIndex % 2 === 0
-                  ? "animate-fadeInUp"
-                  : "animate-fadeInDown"
-                  }`}
-              >
-                <Link to={`/book/${book.id}`} className="block cursor-pointer">
-                  <div
-                    className={`overflow-hidden ${index === 1 ? "rounded-b-full" : "rounded-t-full"
-                      }`}
-                  >
-                    {index === 1 && (
-                      <div className="p-4 text-center text-sm ">
-                        <h3 className="font-semibold">{book.title}</h3>
-                        <p className="text-gray-600">{book.author}</p>
-                      </div>
-                    )}
-                    <img
-                      src={book.cover}
-                      alt={book.title}
-                      className="w-full h-64 object-cover"
-                    />
-                    {index !== 1 && (
-                      <div className="p-4 text-center text-sm ">
-                        <h3 className="font-semibold">{book.title}</h3>
-                        <p className="text-gray-600">{book.author}</p>
-                      </div>
-                    )}
+    <div className="min-h-screen bg-gray-100 font-sans">
+      {/* Modern Hero Section */}
+      <div className="relative bg-gradient-to-r from-indigo-800 via-purple-900 to-indigo-900 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute w-96 h-96 bg-white rounded-full -top-48 -left-48 transform rotate-45"></div>
+          <div className="absolute w-72 h-72 bg-indigo-400 rounded-full bottom-0 right-0 transform -rotate-45"></div>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            {/* Left Content */}
+            <div className="text-center md:text-left">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight">
+                Explore Your
+                <span className="block text-indigo-300">Next Great Read</span>
+              </h1>
+              <p className="mt-4 text-lg md:text-xl text-indigo-100 max-w-md">
+                Dive into a universe of stories, knowledge, and imagination
+                waiting to be discovered.
+              </p>
+              <div className="mt-8 max-w-md mx-auto md:mx-0">
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <SearchIcon className="h-6 w-6 text-indigo-300 group-focus-within:text-white transition-colors" />
                   </div>
-                </Link>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="block w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-sm border border-indigo-300/20 rounded-lg text-white placeholder-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all duration-300"
+                    placeholder="Find books, authors, or topics..."
+                  />
+                  <button className="absolute inset-y-0 right-0 px-6 bg-indigo-500 text-white rounded-r-lg hover:bg-indigo-600 transition-colors">
+                    Search
+                  </button>
+                </div>
               </div>
-            ))}
+            </div>
+            {/* Right Book Stack */}
+            <div className="flex justify-center md:justify-end">
+              <div className="relative w-72 h-[28rem] perspective-1000">
+                {bookOrder.map((bookIdx, index) => (
+                  <div
+                    key={bookIdx}
+                    className={`absolute w-full transition-all duration-500 ease-in-out`}
+                    style={{
+                      zIndex: bookOrder.length - index,
+                      transform: `translateY(${index * 20}px) translateZ(${
+                        (bookOrder.length - index - 1) * 10
+                      }px) rotate(${index % 2 === 0 ? 2 : -2}deg)`,
+                      opacity: 1 - index * 0.2,
+                    }}
+                  >
+                    <div className="rounded-xl overflow-hidden">
+                      <img
+                        src={books[bookIdx].image}
+                        alt={books[bookIdx].title}
+                        className="w-full h-80 object-cover"
+                      />
+                      <div className="p-4 bg-indigo-50">
+                        <h3 className="text-lg font-semibold text-indigo-900 truncate">
+                          {books[bookIdx].title}
+                        </h3>
+                        <p className="text-sm text-indigo-600">
+                          {books[bookIdx].authorName}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </section>
-      </main>
+        </div>
+      </div>
     </div>
   );
-};
+}
 
-export default HeroSection;
+export default App;

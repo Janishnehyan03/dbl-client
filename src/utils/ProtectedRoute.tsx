@@ -15,7 +15,7 @@ const ProtectedRoutes: React.FC = () => {
       }
 
       try {
-        const response = await Axios.post("/users/check-login", {
+        const response = await Axios.post("/auth/check-login", {
           token: loginToken,
         });
         if (response.data.loggedIn) {

@@ -1,16 +1,25 @@
-import AuthorsPage from "../pages/admin/authors/AuthorsPage";
-import BooksPage from "../pages/admin/books/BooksPage";
-import EditBook from "../pages/admin/books/edit-book/EditBook";
-import Categories from "../pages/admin/categories/Categories";
-import Dashboard from "../pages/admin/components/Dashboard";
-import ConfigurationPage from "../pages/admin/configurations/ConfigurationPage";
-import IssueBook from "../pages/admin/issues/IssueReturnSection";
-import LanguageLocationPage from "../pages/admin/language-location/LanguageLocation";
-import Publishers from "../pages/admin/publishers/Publishers";
-import DailyQuotesAdmin from "../pages/admin/quotes/DailyQuotePageAdmin";
-import SectionPage from "../pages/admin/sections/SectionPage";
-import StudentsPage from "../pages/admin/students/StudentsPage";
-import StudentProfile from "../pages/user/StudentProfile";
+import Dashboard from "../pages/admin/components/dashboard/Dashboard";
+import AuthorsPage from "../pages/authors/AuthorsPage";
+import AddNewBookPage from "../pages/catalog/AddNewBook";
+import CatalogBooksPage from "../pages/catalog/BooksPage";
+import BulkImportPage from "../pages/catalog/BulkImportPage";
+import EditBookForm from "../pages/catalog/EditBookPage";
+import CategoriesPage from "../pages/categories/CategoriesPage";
+import IssueBookPage from "../pages/circulation/IssueBookPage";
+import OverdueListPage from "../pages/circulation/OverdueListPage";
+import ReturnBookPage from "../pages/circulation/ReturnBookPage";
+import AcademicMangement from "../pages/classes/AcademicManagement";
+import FinesPage from "../pages/fines/FinesPage";
+import LanguagesPage from "../pages/languages/Languages";
+import LocationsPage from "../pages/locations/Locations";
+import PatronsPage from "../pages/patrons/PatronsPage";
+import Publishers from "../pages/publishers/Publishers";
+import QuotesPage from "../pages/quotes/Quotes";
+import SectionsPage from "../pages/sections/SectionsPage";
+import AccessControlPage from "../pages/settings/AccessControlPage";
+import GeneralSettings from "../pages/settings/GeneralSettings";
+import ReportPage from "../pages/settings/ReportPage";
+import UserSettings from "../pages/settings/UserSettings";
 
 const AdminRoutes = [
   // admin
@@ -18,57 +27,93 @@ const AdminRoutes = [
     path: "/admin",
     element: <Dashboard />,
   },
-  // books
-  {
-    path: "/books",
-    element: <BooksPage />,
-  },
-  {
-    path: "/edit-book/:bookId",
-    element: <EditBook />,
-  },
+
   //   publisher
   {
     path: "/publishers",
     element: <Publishers />,
-  },
-  //   students
-  {
-    path: "/students",
-    element: <StudentsPage />,
   },
   // authors
   {
     path: "/authors",
     element: <AuthorsPage />,
   },
+
   {
-    path: "/categories/admin",
-    element: <Categories />,
+    path: "/circulation/issue",
+    element: <IssueBookPage />,
   },
   {
-    path: "/language-location",
-    element: <LanguageLocationPage />,
+    path: "/circulation/return",
+    element: <ReturnBookPage />,
   },
   {
-    path: "/sections",
-    element: <SectionPage />,
+    path: "/circulation/overdue",
+    element: <OverdueListPage />,
   },
   {
-    path: "/book-issue-return",
-    element: <IssueBook />,
+    path: "/patrons",
+    element: <PatronsPage />,
   },
   {
-    path: "/daily-quotes",
-    element: <DailyQuotesAdmin />,
+    path: "/catalog/books",
+    element: <CatalogBooksPage />,
   },
   {
-    path: "/configurations",
-    element: <ConfigurationPage />,
+    path: "/catalog/books/new",
+    element: <AddNewBookPage />,
   },
   {
-    path: "/profile/:memberId",
-    element: <StudentProfile />,
+    path: "/catalog/import",
+    element: <BulkImportPage />,
+  },
+  {
+    path: "/categories-page",
+    element: <CategoriesPage />,
+  },
+  {
+    path: "/setup/locations",
+    element: <LocationsPage />,
+  },
+  {
+    path: "/setup/languages",
+    element: <LanguagesPage />,
+  },
+  {
+    path: "/setup/sections",
+    element: <SectionsPage />,
+  },
+  {
+    path: "/fines",
+    element: <FinesPage />,
+  },
+  {
+    path: "/quotes",
+    element: <QuotesPage />,
+  },
+  {
+    path: "/settings/general",
+    element: <GeneralSettings />,
+  },
+  {
+    path: "/settings/users",
+    element: <UserSettings />,
+  },
+  {
+    path: "/settings/reports",
+    element: <ReportPage />,
+  },
+  {
+    path: "/settings/access-control",
+    element: <AccessControlPage />,
+  },
+  {
+    path: "/settings/academics",
+    element: <AcademicMangement />,
+  },
+  {
+    path: "/catalog/books/:id",
+    element: <EditBookForm />,
   },
 ];
 

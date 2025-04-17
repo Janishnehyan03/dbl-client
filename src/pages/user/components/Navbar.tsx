@@ -10,21 +10,19 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white">
+    <header className="sticky top-0 z-30 bg-white p-4">
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
         <Link to="/">
-          <h1 className="text-xl font-bold">
-            Dr. U Bapputty Haji Library
-          </h1>
+          <h1 className="text-xl font-bold">Dr. U Bapputty Haji Library</h1>
         </Link>
         <nav className="space-x-6 hidden lg:flex">
-            {[
+          {[
             { name: "Home", url: "/" },
             { name: "Search Books", url: "/search" },
             { name: "Categories", url: "/categories" },
             { name: "Announcements", url: "/announcements" },
             { name: "Contact Us", url: "/contact-us" },
-            ].map((item) => (
+          ].map((item) => (
             <Link
               key={item.name}
               to={item.url}
@@ -32,14 +30,10 @@ const Navbar: React.FC = () => {
             >
               {item.name}
             </Link>
-            ))}
+          ))}
         </nav>
         <div className="space-x-4 flex items-center">
-          <input
-            type="text"
-            placeholder="Search book..."
-            className="border border-gray-400 rounded-full px-4 py-2 text-sm w-full lg:w-auto"
-          />
+        
           <button
             className="lg:hidden flex flex-col ml-4"
             onClick={toggleMobileMenu}

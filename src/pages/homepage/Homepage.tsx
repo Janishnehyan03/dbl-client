@@ -4,6 +4,7 @@ import CategoriesCard from "./CategoriesCard";
 import HeroSection from "./HeroSection";
 import MissionVision from "../../components/MissionVision";
 import DailyQuotes from "../../components/DailyQuotes";
+import Footer from "../../components/home/LibraryFooter";
 
 const HomePage: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const HomePage: React.FC = () => {
       <DailyQuotes />
       <CategoriesCard />
       <MissionVision />
+      <Footer />
     </main>
   );
 };
