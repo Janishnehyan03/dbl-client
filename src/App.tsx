@@ -13,6 +13,7 @@ import Layout from "./pages/user/components/Layout";
 import AdminRoutes from "./utils/AdminRoutes";
 import ProtectedRoutes from "./utils/ProtectedRoute";
 import { ConfigurationProvider } from "./utils/contexts/configurationContext";
+import BookDetails from "./pages/books/BookDetails";
 
 export default function App() {
   return (
@@ -23,11 +24,11 @@ export default function App() {
         <Route path="*" element={<ErrorPage />} />
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/book/:id" element={<BookDetails />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/categories" element={<CategoriesPage/>} />
-          <Route path="/announcements" element={<AnnouncementsPage/>} />
-          <Route path="/contact-us" element={<ContactUsPage/>} />
-
+          <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/announcements" element={<AnnouncementsPage />} />
+          <Route path="/contact-us" element={<ContactUsPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route element={<ProtectedRoutes />}>

@@ -8,80 +8,60 @@ function BookCard({
   isNewArrival?: boolean;
 }) {
   return (
-    <div className="w-full bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-      <Link to={`/book/${book._id}`} className="block p-6">
-        <div className="flex flex-col space-y-4">
-          {/* New Arrival Image */}
-          {isNewArrival && (
-            <div className="relative">
-              <img
-                src="https://images.unsplash.com/photo-1539877254216-818ed7c76096?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-                alt={book.title}
-                className="w-full h-48 object-cover rounded-lg shadow-sm"
-              />
-              <span className="absolute top-2 left-2 px-2 py-1 text-xs font-bold text-white bg-red-500 rounded-full">
-                New Arrival
+    <div className="w-full bg-white rounded-lg border border-gray-200 hover:border-indigo-300 shadow-sm hover:shadow-md transition-all duration-200">
+      <Link to={`/book/${book._id}`} className="block p-5">
+        <div className="flex flex-col space-y-3">
+          {/* Book Title and New Arrival Badge */}
+          <div className="flex items-start justify-between">
+            <h3 className="text-xl font-bold text-gray-800">
+              {book.title}
+            </h3>
+            {isNewArrival && (
+              <span className="px-2 py-1 text-xs font-bold text-white bg-indigo-600 rounded-full">
+                New
               </span>
-            </div>
-          )}
+            )}
+          </div>
 
-          {/* Book Title with Gradient */}
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            {book.title}
-          </h3>
-
-          {/* Book Details Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Book Details */}
+          <div className="space-y-2">
             <div>
-              <span className="text-sm font-semibold text-gray-500">
-                Author(s):{" "}
-              </span>
-              <span className="text-sm text-gray-900">
+              <p className="text-sm text-gray-600">
                 {book.authors && book.authors.length > 0
                   ? book.authors.map((author: any) => author.name).join(", ")
-                  : "Unknown"}
-              </span>
+                  : "Unknown author"}
+              </p>
             </div>
 
-            {book.publisher && (
-              <div>
-                <span className="text-sm font-semibold text-gray-500">
-                  Publisher:{" "}
-                </span>
-                <span className="text-sm text-gray-900">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+              {book.publisher && (
+                <div className="text-gray-700">
+                  <span className="text-gray-500">Published by </span>
                   {book.publisher.name}
-                </span>
-              </div>
-            )}
+                </div>
+              )}
 
-            {book.publishedDate && (
-              <div>
-                <span className="text-sm font-semibold text-gray-500">
-                  Published:{" "}
-                </span>
-                <span className="text-sm text-gray-900">
+              {book.publishedDate && (
+                <div className="text-gray-700">
                   {new Date(book.publishedDate).getFullYear()}
-                </span>
-              </div>
-            )}
+                </div>
+              )}
 
-            {book.pageCount && (
-              <div>
-                <span className="text-sm font-semibold text-gray-500">
-                  Pages:{" "}
-                </span>
-                <span className="text-sm text-gray-900">{book.pageCount}</span>
-              </div>
-            )}
+              {book.pageCount && (
+                <div className="text-gray-700">
+                  {book.pageCount} pages
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Categories */}
           {book.categories && book.categories.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 pt-1">
               {book.categories.map((category: any, index: number) => (
                 <span
                   key={index}
-                  className="px-3 py-1 text-xs font-medium rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-sm"
+                  className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-800"
                 >
                   {category.name}
                 </span>
@@ -89,15 +69,12 @@ function BookCard({
             </div>
           )}
 
-          {/* Action Button */}
-          <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-            <span className="text-sm font-semibold text-indigo-600 group-hover:text-indigo-800 transition-colors">
-              Explore Book
-            </span>
-            <div className="flex items-center space-x-2 text-indigo-500 group-hover:text-indigo-700 transition-colors">
-              <span className="text-sm font-medium">Details</span>
+          {/* Action Link */}
+          <div className="pt-2 mt-2 border-t border-gray-100">
+            <div className="inline-flex items-center text-indigo-600 hover:text-indigo-800 transition-colors">
+              <span className="text-sm font-medium">View details</span>
               <svg
-                className="w-5 h-5"
+                className="w-4 h-4 ml-1"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

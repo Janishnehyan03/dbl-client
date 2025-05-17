@@ -45,35 +45,43 @@ const IssueBookPage: React.FC = () => {
   // Debounced Search Handlers
   const handlePatronSearch = useCallback(
     debounce(async (admNumber: string) => {
-      if (!validateInput(admNumber)) {
-        setError("Admission Number must be alphanumeric.");
+      const trimmedNumber = admNumber.trim();
+      
+      if (!trimmedNumber) {
+        setError("Please enter an Admission Number");
         setLoading(false);
         return;
       }
+  
+      if (!validateInput(trimmedNumber)) {
+        setError("Admission Number must be alphanumeric");
+        setLoading(false);
+        return;
+      }
+  
       setError(null);
       setLoading(true);
+  
       try {
-        const response = await Axios.get(
-          `/patrons/search/data?search=${admNumber}`
-        );
-        const foundPatrons = response.data; // Expect single object
-        if (foundPatrons && foundPatrons.length > 0) {
-          const foundPatron = foundPatrons[0]; // Use the first found patron
-          if (foundPatron) {
-            setAdmissionNumber(foundPatron.admissionNumber || "");
-            setPatron(foundPatron);
-            setStep("book");
-          } else {
-            setError("No patron found with this Admission Number.");
-          }
+        const response = await Axios.get(`/patrons/search/data`, {
+          params: { admissionNumber: trimmedNumber }
+        });
+  
+        // The backend returns a single patron object, not an array
+        const foundPatron = response.data;
+  
+        if (foundPatron) {
+          setAdmissionNumber(foundPatron.admissionNumber || "");
+          setPatron(foundPatron);
+          setStep("book");
         } else {
-          setError("No patron found with this Admission Number.");
+          setError("No patron found with this Admission Number");
         }
       } catch (error: any) {
+        console.error("Search error:", error);
         setError(
           error.response?.data?.message ||
-            error.message ||
-            "Failed to fetch patron."
+          "An error occurred while searching. Please try again."
         );
       } finally {
         setLoading(false);
@@ -131,12 +139,13 @@ const IssueBookPage: React.FC = () => {
     setError(null);
     setSuccess(false);
     try {
-      await Axios.post("/issues", {
+      await Axios.post("/circulations/issue", {
         patronId: patron._id,
         bookId: book._id,
       });
       setSuccess(true);
       setTimeout(() => resetForm(), 2000);
+      
     } catch (error: any) {
       setError(
         error.response?.data?.message ||

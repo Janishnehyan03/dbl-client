@@ -91,16 +91,16 @@ const CategoriesCard: React.FC = () => {
         </div>
 
         {/* Categories List */}
-        <div className="flex space-x-3 mb-12 overflow-x-auto scrollbar-hide pb-2 snap-x">
+        <div className="flex flex-wrap gap-3 mb-8">
           {categories.map((category) => (
             <button
               key={category._id}
               onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-3 text-sm font-semibold rounded-full whitespace-nowrap transition-all duration-300 snap-start ${
+              className={`px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-200 ${
                 selectedCategory?._id === category._id
-                  ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg"
-                  : "bg-white text-gray-700 border border-gray-200 hover:bg-indigo-50 hover:text-indigo-600 hover:shadow-sm"
-              } focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
+                  ? "bg-indigo-600 text-white shadow-md"
+                  : "bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-indigo-600"
+              } focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1`}
             >
               {category.name}
             </button>

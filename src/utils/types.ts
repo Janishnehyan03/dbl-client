@@ -12,7 +12,7 @@ export interface Contact {
 
 export interface Publisher {
   _id: string;
-  publisherName: string;
+  name: string;
   address?: Address;
   contact?: Contact;
   establishedYear?: number;
@@ -32,7 +32,7 @@ export interface Author {
 
 export interface ILocation {
   _id?: string;
-  locationName: string;
+  name: string;
 }
 
 export interface Member {
@@ -216,7 +216,7 @@ export interface Book {
   pages?: number;
   edition?: string;
   issn?: string;
-  location?: Location;
+  location?: ILocation;
   publisher?: Publisher;
   callNumber?: string;
   language?: ILanguage;
@@ -229,7 +229,10 @@ export interface Book {
   keywords?: string[];
   createdAt?: string;
   updatedAt?: string;
-  status:string
+  status: any;
+  currentHolder?: Member;
+  lastIssueDate?: string;
+  totalIssues?: number;
 }
 
 export type BookDocument = Book & { _id: string };
