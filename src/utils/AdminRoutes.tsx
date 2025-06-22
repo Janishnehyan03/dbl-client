@@ -5,9 +5,7 @@ import CatalogBooksPage from "../pages/catalog/BooksPage";
 import BulkImportPage from "../pages/catalog/BulkImportPage";
 import EditBookForm from "../pages/catalog/EditBookPage";
 import CategoriesPage from "../pages/categories/CategoriesPage";
-import IssueBookPage from "../pages/circulation/IssueBookPage";
-import OverdueListPage from "../pages/circulation/OverdueListPage";
-import ReturnBookPage from "../pages/circulation/ReturnBookPage";
+import CirculationPage from "../pages/circulation/CirculationPage";
 import AcademicMangement from "../pages/classes/AcademicManagement";
 import FinesPage from "../pages/fines/FinesPage";
 import LanguagesPage from "../pages/languages/Languages";
@@ -40,17 +38,10 @@ const AdminRoutes = [
   },
 
   {
-    path: "/circulation/issue",
-    element: <IssueBookPage />,
+    path: "/circulation",
+    element: <CirculationPage />,
   },
-  {
-    path: "/circulation/return",
-    element: <ReturnBookPage />,
-  },
-  {
-    path: "/circulation/overdue",
-    element: <OverdueListPage />,
-  },
+
   {
     path: "/patrons",
     element: <PatronsPage />,

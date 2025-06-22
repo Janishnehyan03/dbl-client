@@ -30,7 +30,7 @@ const CatalogBooksPage: React.FC = () => {
   const [selectedAuthor, setSelectedAuthor] = useState("");
   const [selectedPublisher, setSelectedPublisher] = useState("");
   const [availabilityFilter, setAvailabilityFilter] = useState<
-    "all" | "available" | "unavailable" | "lost" | "damaged" | "checked_out"
+    "all" | "available" | "unavailable" | "lost" | "damaged" | "issued"
   >("all");
   const [publishedYearFilter, setPublishedYearFilter] = useState<
     [number, number]
@@ -316,7 +316,7 @@ const CatalogBooksPage: React.FC = () => {
                   <span className="text-green-600 font-medium text-sm italic">
                     {book.status}
                   </span>
-                ) : book.status === "checked_out" ? (
+                ) : book.status === "issued" ? (
                   <span className="text-blue-600 font-medium text-sm italic">
                     {book.status}
                   </span>
@@ -505,7 +505,7 @@ const CatalogBooksPage: React.FC = () => {
                 >
                   <option value="all">All Availability</option>
                   <option value="available">Available</option>
-                  <option value="checked_out">Checked Out</option>
+                  <option value="issued">issued</option>
                   <option value="lost">Lost</option>
                   <option value="damaged">Damaged</option>
                 </select>

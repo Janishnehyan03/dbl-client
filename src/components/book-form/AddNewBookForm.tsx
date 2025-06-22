@@ -265,7 +265,7 @@ const AddNewBookForm: React.FC = () => {
               >
                 <option hidden>Select status</option>
                 <option value="available">Available</option>
-                <option value="checked_out">Checked Out</option>
+                <option value="issued">issued</option>
                 <option value="damaged">Damaged</option>
                 <option value="lost">Lost</option>
               </select>

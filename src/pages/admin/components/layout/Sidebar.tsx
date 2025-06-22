@@ -40,12 +40,7 @@ const Sidebar: React.FC = () => {
     {
       icon: <FileText size={20} />,
       text: "Circulation",
-      hasDropdown: true,
-      subItems: [
-        { text: "Issue Books", path: "/circulation/issue" },
-        { text: "Return Books", path: "/circulation/return" },
-        { text: "Overdue List", path: "/circulation/overdue" },
-      ],
+      path: "/circulation",
     },
     { icon: <Users size={20} />, text: "Patrons", path: "/patrons" },
     {
