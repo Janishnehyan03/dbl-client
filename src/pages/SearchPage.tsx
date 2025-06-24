@@ -1,59 +1,65 @@
 import React, { useState } from "react";
-import { gql, useLazyQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-
-const SEARCH_BOOKS_QUERY = gql`
-  query SearchBooks($field: String!, $value: String!) {
-    searchBooks(field: $field, value: $value) {
-      id
-      title
-      ISBN
-      callNumber
-      accNumber
-      authors {
-        firstName
-        lastName
-      }
-    }
-  }
-`;
+import axios from "axios";
+import Axios from "../utils/Axios";
 
 const SearchPage: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchField, setSearchField] = useState<
-    "title" | "ISBN" | "callNumber" | "accNumber" | "author" | "englishTitle"
+    "title" | "isbn" | "callNumber" | "accNumber" | "author" 
   >("title");
+  const [bookData, setBookData] = useState<any[]>([]);
+  const [bookLoading, setBookLoading] = useState(false);
+  const [bookError, setBookError] = useState<string | null>(null);
 
   const navigate = useNavigate();
-  const [
-    searchBooks,
-    { data: bookData, loading: bookLoading, error: bookError },
-  ] = useLazyQuery(SEARCH_BOOKS_QUERY);
+
+  const fetchBooks = async (field: string, value: string) => {
+    setBookLoading(true);
+    setBookError(null);
+    try {
+      // Construct query params as before
+      const params = new URLSearchParams();
+      params.append("search", `${field}:${value}`);
+      // Use axios instead of fetch
+      const response = await Axios.get(
+        `/books/search/data?${params.toString()}`
+      );
+      setBookData(response.data || []);
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        setBookError(
+          error.response?.data?.message || error.message || "Unknown error"
+        );
+      } else {
+        setBookError(error.message || "Unknown error");
+      }
+      setBookData([]);
+    } finally {
+      setBookLoading(false);
+    }
+  };
 
   const handleFieldChange = (
     field:
       | "title"
-      | "ISBN"
+      | "isbn"
       | "callNumber"
       | "accNumber"
       | "author"
-      | "englishTitle"
   ) => {
     setSearchField(field);
     setSearchInput("");
+    setBookData([]);
   };
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     setSearchInput(input);
-
     if (input.trim().length > 0) {
-      searchBooks({
-        variables: {
-          field: searchField === "author" ? "author" : searchField,
-          value: input,
-        },
-      });
+      fetchBooks(searchField, input);
+    } else {
+      setBookData([]);
     }
   };
 
@@ -81,11 +87,7 @@ const SearchPage: React.FC = () => {
               className="flex-1 px-5 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
             />
             <button
-              onClick={() =>
-                searchBooks({
-                  variables: { field: searchField, value: searchInput },
-                })
-              }
+              onClick={() => fetchBooks(searchField, searchInput)}
               className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200"
             >
               Search
@@ -97,11 +99,10 @@ const SearchPage: React.FC = () => {
         <div className="flex flex-wrap justify-center gap-3 mt-6">
           {[
             { field: "title", label: "Title" },
-            { field: "ISBN", label: "ISBN" },
+            { field: "isbn", label: "ISBN" },
             { field: "callNumber", label: "Call Number" },
             { field: "accNumber", label: "Acc Number" },
             { field: "author", label: "Author" },
-            { field: "englishTitle", label: "English Title" },
           ].map(({ field, label }) => (
             <button
               key={field}
@@ -128,30 +129,34 @@ const SearchPage: React.FC = () => {
         )}
         {bookError && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
-            <p className="text-red-700">Error: {bookError.message}</p>
+            <p className="text-red-700">Error: {bookError}</p>
           </div>
         )}
 
-        {bookData && bookData.searchBooks.length > 0 && (
+        {bookData && bookData.length > 0 && (
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-indigo-50">
                   <tr>
-                    {["Title", "Authors", "ISBN", "Call Number", "Acc Number"].map(
-                      (header) => (
-                        <th
-                          key={header}
-                          className="px-6 py-4 text-left text-sm font-semibold text-gray-900"
-                        >
-                          {header}
-                        </th>
-                      )
-                    )}
+                    {[
+                      "Title",
+                      "Authors",
+                      "ISBN",
+                      "Call Number",
+                      "Acc Number",
+                    ].map((header) => (
+                      <th
+                        key={header}
+                        className="px-6 py-4 text-left text-sm font-semibold text-gray-900"
+                      >
+                        {header}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {bookData.searchBooks.map((book: any) => (
+                  {bookData.map((book: any) => (
                     <tr
                       key={book.id}
                       className="hover:bg-gray-50 transition-all duration-150 cursor-pointer"
@@ -160,15 +165,16 @@ const SearchPage: React.FC = () => {
                       <td className="px-6 py-4 text-gray-900">{book.title}</td>
                       <td className="px-6 py-4 text-gray-700">
                         {book.authors
-                          .map(
-                            (author: any) =>
-                              `${author.firstName} ${author.lastName}`
-                          )
+                          .map((author: any) => author.name)
                           .join(", ")}
                       </td>
-                      <td className="px-6 py-4 text-gray-700">{book.ISBN}</td>
-                      <td className="px-6 py-4 text-gray-700">{book.callNumber}</td>
-                      <td className="px-6 py-4 text-gray-700">{book.accNumber}</td>
+                      <td className="px-6 py-4 text-gray-700">{book.isbn}</td>
+                      <td className="px-6 py-4 text-gray-700">
+                        {book.callNumber}
+                      </td>
+                      <td className="px-6 py-4 text-gray-700">
+                        {book.accNumber}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -177,7 +183,7 @@ const SearchPage: React.FC = () => {
           </div>
         )}
 
-        {bookData?.searchBooks.length === 0 && (
+        {bookData && bookData.length === 0 && !bookLoading && (
           <div className="text-center py-10 bg-white rounded-xl shadow-lg">
             <p className="text-gray-600 text-lg">No matching books found</p>
           </div>
