@@ -124,8 +124,12 @@ function IssueBookPage() {
 
       setIsLoadingBook(true);
       try {
+        // Construct query params as before
+        const params = new URLSearchParams();
+        params.append("search", `accNumber:${code.trim()}`);
+        // Use axios instead of fetch
         const response = await Axios.get(
-          `/books/search/data?search=${encodeURIComponent(code.trim())}`
+          `/books/search/data?${params.toString()}`
         );
         const fetchedBooks: Book[] = response.data;
 
@@ -261,7 +265,7 @@ function IssueBookPage() {
             Library Book Management
           </h1>
           <p className="text-gray-600 mt-1 text-sm sm:text-base">
-            Scan or enter member ID and book ISBN to issue or return books
+            Scan or enter member ID and book Acc Number to issue or return books
           </p>
         </header>
 
@@ -442,7 +446,7 @@ function IssueBookPage() {
                     />
                     <input
                       type="text"
-                      placeholder="Enter ISBN to issue"
+                      placeholder="Enter Acc Number to issue"
                       className="w-full rounded-xl border border-gray-300 pl-10 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
                       value={bookCode}
                       onChange={(e) => setBookCode(e.target.value)}
