@@ -14,6 +14,7 @@ import AdminRoutes from "./utils/AdminRoutes";
 import ProtectedRoutes from "./utils/ProtectedRoute";
 import { ConfigurationProvider } from "./utils/contexts/configurationContext";
 import BookDetails from "./pages/books/BookDetails";
+import CategoryBooks from "./pages/categories/CategoryBooks";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/book/:id" element={<BookDetails />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/category/:id" element={<CategoryBooks />} />
           <Route path="/announcements" element={<AnnouncementsPage />} />
           <Route path="/contact-us" element={<ContactUsPage />} />
         </Route>

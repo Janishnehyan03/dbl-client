@@ -1,8 +1,6 @@
-import { SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState("");
   const [bookOrder, setBookOrder] = useState([0, 1, 2, 3]);
 
   const books = [
@@ -65,23 +63,7 @@ function App() {
                 Dive into a universe of stories, knowledge, and imagination
                 waiting to be discovered.
               </p>
-              <div className="mt-8 max-w-md mx-auto md:mx-0">
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <SearchIcon className="h-6 w-6 text-indigo-300 group-focus-within:text-white transition-colors" />
-                  </div>
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="block w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-sm border border-indigo-300/20 rounded-lg text-white placeholder-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all duration-300"
-                    placeholder="Find books, authors, or topics..."
-                  />
-                  <button className="absolute inset-y-0 right-0 px-6 bg-indigo-500 text-white rounded-r-lg hover:bg-indigo-600 transition-colors">
-                    Search
-                  </button>
-                </div>
-              </div>
+              
             </div>
             {/* Right Book Stack */}
             <div className="flex justify-center md:justify-end">
