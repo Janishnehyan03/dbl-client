@@ -1,109 +1,197 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-function App() {
-  const [bookOrder, setBookOrder] = useState([0, 1, 2, 3]);
+// Define a type for our book data for better code safety
+export type Book = {
+  id: number;
+  title: string;
+  author: string;
+  image: string;
+  genre: string;
+  year: number;
+  rating: number; // Rating out of 5
+  description: string;
+};
 
-  const books = [
-    {
-      title: "The Great Gatsby",
-      authorName: "F. Scott Fitzgerald",
-      image:
-        "https://images.unsplash.com/photo-1629992101753-56d196c8aabb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Ym9vayUyMGNvdmVyfGVufDB8fDB8fHww",
-    },
-    {
-      title: "To Kill a Mockingbird",
-      authorName: "Harper Lee",
-      image:
-        "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Ym9vayUyMGNvdmVyfGVufDB8fDB8fHww",
-    },
-    {
-      title: "1984",
-      authorName: "George Orwell",
-      image:
-        "https://images.unsplash.com/photo-1641154748135-8032a61a3f80?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJvb2slMjBjb3ZlcnxlbnwwfHwwfHx8MA%3D%3D",
-    },
-    {
-      title: "The Catcher in the Rye",
-      authorName: "J.D. Salinger",
-      image:
-        "https://images.unsplash.com/photo-1621351183012-e2f9972dd9bf?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGJvb2slMjBjb3ZlcnxlbnwwfHwwfHx8MA%3D%3D",
-    },
-  ];
+// Expanded and more detailed book data
+const books: Book[] = [
+  {
+    id: 1,
+    title: "The Great Gatsby",
+    author: "F. Scott Fitzgerald",
+    image:
+      "https://images.unsplash.com/photo-1629992101753-56d196c8aabb?w=800&auto=format&fit=crop&q=60",
+    genre: "Classic",
+    year: 1925,
+    rating: 4,
+    description:
+      "A novel about the American dream, decadence, and idealism in the Jazz Age.",
+  },
+  {
+    id: 2,
+    title: "To Kill a Mockingbird",
+    author: "Harper Lee",
+    image:
+      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&auto=format&fit=crop&q=60",
+    genre: "Fiction",
+    year: 1960,
+    rating: 5,
+    description:
+      "A profound story of racial injustice and the loss of innocence in the American South.",
+  },
+  {
+    id: 3,
+    title: "1984",
+    author: "George Orwell",
+    image:
+      "https://images.unsplash.com/photo-1641154748135-8032a61a3f80?w=800&auto=format&fit=crop&q=60",
+    genre: "Dystopian",
+    year: 1949,
+    rating: 5,
+    description:
+      "A chilling prophecy about the future and a timeless cautionary tale.",
+  },
+  {
+    id: 4,
+    title: "The Catcher in the Rye",
+    author: "J.D. Salinger",
+    image:
+      "https://images.unsplash.com/photo-1621351183012-e2f9972dd9bf?w=800&auto=format&fit=crop&q=60",
+    genre: "Fiction",
+    year: 1951,
+    rating: 3,
+    description:
+      "A classic novel about teenage angst, rebellion, and alienation.",
+  },
+  {
+    id: 5,
+    title: "Dune",
+    author: "Frank Herbert",
+    image:
+      "https://images.unsplash.com/photo-1608178388486-75cf3e477b5b?w=800&auto=format&fit=crop&q=60",
+    genre: "Sci-Fi",
+    year: 1965,
+    rating: 5,
+    description:
+      "An epic science fiction saga of politics, religion, and power on a desert planet.",
+  },
+  {
+    id: 6,
+    title: "Pride and Prejudice",
+    author: "Jane Austen",
+    image:
+      "https://images.unsplash.com/photo-1619802241126-66989f18a6e4?w=800&auto=format&fit=crop&q=60",
+    genre: "Romance",
+    year: 1813,
+    rating: 4,
+    description:
+      "A witty and romantic novel of manners in 19th-century England.",
+  },
+];
 
+function HeroSection() {
+  const [bookOrder, setBookOrder] = useState(books.map((book) => book.id));
+  const [isFading, setIsFading] = useState(false);
+
+  // The current book is always the first one in the order
+  const currentBook = books.find((b) => b.id === bookOrder[0])!;
+
+  // The cycling animation logic
   useEffect(() => {
     const cycleInterval = setInterval(() => {
-      setBookOrder((prevOrder: any) => {
-        const newOrder = [...prevOrder];
-        const topBook = newOrder.shift();
-        newOrder.push(topBook);
-        return newOrder;
-      });
-    }, 5000);
+      setIsFading(true); // Start fade-out animation for text
+
+      // After a short delay, update the book order and fade back in
+      setTimeout(() => {
+        setBookOrder((prevOrder) => {
+          const newOrder = [...prevOrder];
+          const topBookId = newOrder.shift();
+          if (topBookId) newOrder.push(topBookId);
+          return newOrder;
+        });
+        setIsFading(false); // Start fade-in animation
+      }, 300); // This duration should be less than the transition duration
+    }, 5000); // Change book every 5 seconds
 
     return () => clearInterval(cycleInterval);
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 font-sans">
-      {/* Modern Hero Section */}
-      <div className="relative bg-gradient-to-r from-indigo-800 via-purple-900 to-indigo-900 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute w-96 h-96 bg-white rounded-full -top-48 -left-48 transform rotate-45"></div>
-          <div className="absolute w-72 h-72 bg-indigo-400 rounded-full bottom-0 right-0 transform -rotate-45"></div>
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            {/* Left Content */}
-            <div className="text-center md:text-left">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight">
-                Explore Your
-                <span className="block text-indigo-300">Next Great Read</span>
+    <section className="relative bg-gradient-to-br from-slate-50 to-slate-200 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          {/* === Left Content: DYNAMIC Book Info === */}
+          <div className="relative z-10">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-teal-600">
+              Featured This Week
+            </h2>
+
+            {/* Animated container for text content */}
+            <div
+              key={currentBook.id}
+              className={`mt-4 transition-opacity duration-300 ease-in-out ${
+                isFading ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+                {currentBook.title}
               </h1>
-              <p className="mt-4 text-lg md:text-xl text-indigo-100 max-w-md">
-                Dive into a universe of stories, knowledge, and imagination
-                waiting to be discovered.
+              <p className="mt-2 text-lg font-medium text-slate-700">
+                by {currentBook.author}
               </p>
-              
+
+              <p className="mt-4 text-slate-600 max-w-lg leading-relaxed">
+                {currentBook.description}
+              </p>
             </div>
-            {/* Right Book Stack */}
-            <div className="flex justify-center md:justify-end">
-              <div className="relative w-72 h-[28rem] perspective-1000">
-                {bookOrder.map((bookIdx, index) => (
+
+            {/* CTA Buttons */}
+            <div className="mt-8 flex items-center gap-4">
+              <Link to={`/book/${currentBook.id}`}>
+                <button className="bg-teal-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-teal-700 transition-all transform hover:scale-105">
+                  View Details
+                </button>
+              </Link>
+            </div>
+          </div>
+
+          {/* === Right Content: Animated Book Stack === */}
+          <div className="flex items-center justify-center h-full">
+            <div className="relative w-64 sm:w-72 h-[28rem] perspective-1200">
+              {bookOrder.map((bookId, index) => {
+                const book = books.find((b) => b.id === bookId);
+                if (!book) return null;
+
+                const isFrontBook = index === 0;
+
+                return (
                   <div
-                    key={bookIdx}
-                    className={`absolute w-full transition-all duration-500 ease-in-out`}
+                    key={book.id}
+                    className="absolute w-full h-full transition-all duration-700 ease-in-out transform-style-3d"
                     style={{
-                      zIndex: bookOrder.length - index,
-                      transform: `translateY(${index * 20}px) translateZ(${
-                        (bookOrder.length - index - 1) * 10
-                      }px) rotate(${index % 2 === 0 ? 2 : -2}deg)`,
+                      zIndex: books.length - index,
+                      transform: isFrontBook
+                        ? "translateX(0) scale(1.05) rotateY(0deg) rotateZ(0deg)" // Front book is centered
+                        : `translateX(${index * 50}px) scale(${
+                            1 - index * 0.1
+                          }) rotateY(-30deg) rotateZ(${index * 2}deg)`,
                       opacity: 1 - index * 0.2,
                     }}
                   >
-                    <div className="rounded-xl overflow-hidden">
-                      <img
-                        src={books[bookIdx].image}
-                        alt={books[bookIdx].title}
-                        className="w-full h-80 object-cover"
-                      />
-                      <div className="p-4 bg-indigo-50">
-                        <h3 className="text-lg font-semibold text-indigo-900 truncate">
-                          {books[bookIdx].title}
-                        </h3>
-                        <p className="text-sm text-indigo-600">
-                          {books[bookIdx].authorName}
-                        </p>
-                      </div>
-                    </div>
+                    <img
+                      src={book.image}
+                      alt={book.title}
+                      className="w-full h-full object-cover rounded-lg shadow-2xl shadow-slate-400/30"
+                    />
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
-export default App;
+export default HeroSection;

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import Axios from "../../utils/Axios";
+import moment from "moment";
 
 interface Book {
   _id: string;
@@ -398,7 +399,7 @@ function IssueBookPage() {
                                   </p>
                                 )}
                                 <p className="text-xs text-red-600 mt-1">
-                                  Due: {book.dueDate || "N/A"}
+                                  Due: {book.dueDate ? moment(book.dueDate).format("DD MMM YYYY") : "N/A"}
                                 </p>
                               </div>
                             </div>
