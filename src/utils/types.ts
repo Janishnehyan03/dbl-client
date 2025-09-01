@@ -15,12 +15,13 @@ export interface Publisher {
   name: string;
   address?: Address;
   contact?: Contact;
+  email?: string;
   establishedYear?: number;
   createdAt?: string;
   updatedAt?: string;
 }
 
-export interface Author {
+export interface IAuthor {
   _id?: string;
   name: string;
   email?: string;
@@ -53,6 +54,8 @@ export interface Book {
   title: string;
   accessionNumber: string;
   image?: string;
+  circulation?: any;
+
 }
 
 export interface Issue {
@@ -62,6 +65,8 @@ export interface Issue {
   returnDate: string;
   daysLate: number;
   fine: number;
+  patron: Patron;
+
 }
 
 export interface LibraryDetails {
@@ -149,7 +154,7 @@ export type Role11 = {
 };
 
 export interface Student {
-  id: string;
+  _id: string;
   name: string;
   admissionNumber: string;
   type: "student";
@@ -178,7 +183,7 @@ export interface BookFormData {
   callNumber: string | null;
   publisher: string | null;
   pages?: number | null;
-  authors?: Author[]; // Array of author IDs
+  authors?: IAuthor[]; // Array of author IDs
   categories?: string[]; // Array of category IDs
   edition?: string | null;
   issn?: string | null;
@@ -210,7 +215,7 @@ export interface IPublisher {
 
 export interface Book {
   title: string;
-  authors: Author[];
+  authors: IAuthor[];
   categories: ICategory[];
   accNumber: string;
   pages?: number;

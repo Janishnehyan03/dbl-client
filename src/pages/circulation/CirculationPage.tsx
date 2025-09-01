@@ -2,16 +2,15 @@ import { debounce } from "lodash";
 import {
   ArrowRight,
   BookOpen,
-  BookText,
   CheckCircle,
   Scan,
   Search,
   User,
   XCircle,
 } from "lucide-react";
+import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import Axios from "../../utils/Axios";
-import moment from "moment";
 
 interface Book {
   _id: string;
@@ -27,11 +26,11 @@ interface Member {
   _id: string;
   name: string;
   admissionNumber: string;
-  issuedBooks: Book[];
   section?: { name: string };
   class?: { name: string };
   division?: { name: string };
   department?: { name: string };
+  circulations: Book[]; // <--- Fix: Use 'circulations' instead of 'issuedBooks'
 }
 
 interface IssueBookRequest {
@@ -73,25 +72,32 @@ function IssueBookPage() {
         const response = await Axios.get(
           `/patrons/admission-number/${code.trim()}`
         );
-        const patron = response.data._doc;
+        const patron = response.data;
 
         if (!patron) {
           throw new Error("Member not found");
         }
 
+        // Patron.circulations is an array of circulation objects, each with a populated book
+        const circulations: Book[] =
+          Array.isArray(patron.circulations) && patron.circulations.length
+            ? patron.circulations
+                .filter((circ: any) => circ.book && circ.status === "issued")
+                .map((circ: any) => ({
+                  _id: circ.book._id,
+                  title: circ.book.title,
+                  isbn: circ.book.isbn,
+                  status: circ.status,
+                  dueDate: circ.dueDate,
+                  author: circ.book.author,
+                  coverImage: circ.book.coverImage,
+                }))
+            : [];
+
         const member: Member = {
           _id: patron._id,
           name: patron.name,
           admissionNumber: patron.admissionNumber,
-          issuedBooks: response.data.circulations.map((circ: any) => ({
-            _id: circ.book._id,
-            title: circ.book.title,
-            isbn: circ.book.isbn,
-            status: "issued",
-            dueDate: circ.dueDate,
-            author: circ.book.author,
-            coverImage: circ.book.coverImage,
-          })),
           section: patron.section ? { name: patron.section.name } : undefined,
           class: patron.class ? { name: patron.class.name } : undefined,
           division: patron.division
@@ -100,6 +106,7 @@ function IssueBookPage() {
           department: patron.department
             ? { name: patron.department.name }
             : undefined,
+          circulations,
         };
 
         setFoundMember(member);
@@ -183,8 +190,8 @@ function IssueBookPage() {
         if (!prev) return null;
         return {
           ...prev,
-          issuedBooks: [
-            ...prev.issuedBooks,
+          circulations: [
+            ...(prev.circulations ?? []),
             {
               ...selectedBook,
               status: "issued",
@@ -214,32 +221,34 @@ function IssueBookPage() {
   const handleReturn = async (book: Book) => {
     if (!foundMember) return;
 
-    setIsProcessing(true);
-    try {
-      await Axios.post("/circulations/return", {
-        bookId: book._id,
-        patronId: foundMember._id,
-      });
+    if (window.confirm(`Confirm return of "${book.title}"?`)) {
+      setIsProcessing(true);
+      try {
+        await Axios.post("/circulations/return", {
+          bookId: book._id,
+          patronId: foundMember._id,
+        });
 
-      setFoundMember((prev) => {
-        if (!prev) return null;
-        return {
-          ...prev,
-          issuedBooks: prev.issuedBooks.filter((b) => b._id !== book._id),
-        };
-      });
+        setFoundMember((prev) => {
+          if (!prev) return null;
+          return {
+            ...prev,
+            circulations: prev.circulations.filter((b) => b._id !== book._id),
+          };
+        });
 
-      setToast({
-        message: `"${book.title}" returned successfully`,
-        type: "success",
-      });
-    } catch (error: any) {
-      setToast({
-        message: error.response?.data?.message || "Failed to return book",
-        type: "error",
-      });
-    } finally {
-      setIsProcessing(false);
+        setToast({
+          message: `"${book.title}" returned successfully`,
+          type: "success",
+        });
+      } catch (error: any) {
+        setToast({
+          message: error.response?.data?.message || "Failed to return book",
+          type: "error",
+        });
+      } finally {
+        setIsProcessing(false);
+      }
     }
   };
 
@@ -363,55 +372,88 @@ function IssueBookPage() {
 
                   <div>
                     <h5 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
-                      <BookOpen size={14} />
                       Issued Books
                     </h5>
-                    {foundMember.issuedBooks.length === 0 ? (
+                    {foundMember.circulations.length === 0 ? (
                       <div className="bg-gray-50 rounded-lg p-3 text-center text-gray-500 text-sm">
                         No books issued
                       </div>
                     ) : (
                       <ul className="space-y-2">
-                        {foundMember.issuedBooks.map((book) => (
-                          <li
-                            key={book._id}
-                            className="flex items-center justify-between bg-gray-50 rounded-lg p-3 border border-gray-200"
-                          >
-                            <div className="flex items-center gap-3">
-                              {book.coverImage ? (
-                                <img
-                                  src={book.coverImage}
-                                  alt={book.title}
-                                  className="w-10 h-14 object-cover rounded"
-                                />
-                              ) : (
-                                <div className="w-10 h-14 bg-gray-200 rounded flex items-center justify-center">
-                                  <BookText size={14} />
-                                </div>
-                              )}
-                              <div>
-                                <p className="font-medium text-sm">
-                                  {book.title}
-                                </p>
-                                {book.author && (
-                                  <p className="text-xs text-gray-600">
-                                    {book.author}
-                                  </p>
-                                )}
-                                <p className="text-xs text-red-600 mt-1">
-                                  Due: {book.dueDate ? moment(book.dueDate).format("DD MMM YYYY") : "N/A"}
-                                </p>
-                              </div>
-                            </div>
-                            <button
-                              className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs font-medium disabled:opacity-50"
-                              onClick={() => handleReturn(book)}
-                              disabled={isProcessing}
+                        {foundMember.circulations
+                          .filter((book) => book.status === "issued")
+                          .map((book) => (
+                            <li
+                              key={book._id}
+                              className="flex items-center justify-between bg-gray-50 rounded-lg p-3 border border-gray-200"
                             >
-                              Return
-                            </button>
-                          </li>
-                        ))}
+                              <div className="flex items-center gap-3">
+                                <div>
+                                  <p className="font-medium text-sm">
+                                    {book.title}
+                                  </p>
+                                  {book.author && (
+                                    <p className="text-xs text-gray-600">
+                                      {book.author}
+                                    </p>
+                                  )}
+                                  <div className="flex flex-wrap gap-2 mt-1 items-center">
+                                    {/* Issue Date */}
+                                    {book.dueDate && (
+                                      <span className="text-xs text-gray-500">
+                                        Issued:{" "}
+                                        {book.dueDate
+                                          ? moment(book.dueDate)
+                                              .subtract(14, "days")
+                                              .format("DD MMM YYYY")
+                                          : "N/A"}
+                                      </span>
+                                    )}
+                                    {/* Due Date */}
+                                    <span className="text-xs text-blue-600">
+                                      Due:{" "}
+                                      {book.dueDate
+                                        ? moment(book.dueDate).format(
+                                            "DD MMM YYYY"
+                                          )
+                                        : "N/A"}
+                                    </span>
+                                    {/* Overdue */}
+                                    {book.dueDate &&
+                                      moment().isAfter(
+                                        moment(book.dueDate),
+                                        "day"
+                                      ) && (
+                                        <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded font-semibold">
+                                          Overdue
+                                        </span>
+                                      )}
+                                    {/* Fine */}
+                                    {book.dueDate &&
+                                      moment().isAfter(
+                                        moment(book.dueDate),
+                                        "day"
+                                      ) && (
+                                        <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-semibold">
+                                          Fine: ₹
+                                          {moment().diff(
+                                            moment(book.dueDate),
+                                            "days"
+                                          ) * 2}
+                                        </span>
+                                      )}
+                                  </div>
+                                </div>
+                              </div>
+                              <button
+                                className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs font-medium disabled:opacity-50"
+                                onClick={() => handleReturn(book)}
+                                disabled={isProcessing}
+                              >
+                                Return
+                              </button>
+                            </li>
+                          ))}
                       </ul>
                     )}
                   </div>

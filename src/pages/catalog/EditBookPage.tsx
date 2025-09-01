@@ -8,7 +8,7 @@ import { fetchAuthors } from "../../utils/services/authorService";
 import { getBook, updateBook } from "../../utils/services/bookService";
 import { fetchCategories } from "../../utils/services/categoryService";
 import { fetchPublishers } from "../../utils/services/publisherService";
-import { Author, ICategory } from "../../utils/types";
+import { IAuthor, ICategory } from "../../utils/types";
 import { fetchLanguages } from "../../utils/services/languageService";
 import { fetchLocations } from "../../utils/services/locationService";
 import Checkbox from "../../components/ui/CheckBox";
@@ -37,7 +37,7 @@ const EditBookForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [authors, setAuthors] = useState<Author[]>([]);
+  const [authors, setAuthors] = useState<IAuthor[]>([]);
   const [publishers, setPublishers] = useState([]); // Assuming publishers are fetched from somewhere
   const [locations, setLocations] = useState([]); // Assuming locations are fetched from somewhere
   const [languages, setLanguages] = useState([]); // Assuming languages are fetched from somewhere
@@ -125,7 +125,7 @@ const EditBookForm: React.FC = () => {
       const submissionData = {
         ...formData,
         publisher: formData.publisher?._id || null,
-        authors: formData.authors?.map((author: Author) => author._id) || [],
+        authors: formData.authors?.map((author: IAuthor) => author._id) || [],
         categories: formData.categories?.map((cat: ICategory) => cat._id) || [],
       };
 

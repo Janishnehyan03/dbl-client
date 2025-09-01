@@ -11,7 +11,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { fetchBooks } from "../../utils/services/bookService";
-import { BookDocument, IPublisher, ICategory, Author } from "../../utils/types";
+import { BookDocument, IPublisher, ICategory, IAuthor } from "../../utils/types";
 import { fetchCategories } from "../../utils/services/categoryService";
 import { fetchAuthors } from "../../utils/services/authorService";
 import { fetchPublishers } from "../../utils/services/publisherService";
@@ -21,7 +21,7 @@ const CatalogBooksPage: React.FC = () => {
   const [books, setBooks] = useState<BookDocument[]>([]);
   const [filteredBooks, setFilteredBooks] = useState<BookDocument[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [authors, setAuthors] = useState<Author[]>([]);
+  const [authors, setAuthors] = useState<IAuthor[]>([]);
   const [publishers, setPublishers] = useState<IPublisher[]>([]);
 
   // Filters

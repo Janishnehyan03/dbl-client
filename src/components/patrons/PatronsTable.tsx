@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Student } from "../../utils/types";
 import ErrorMessage from "../ui/ErrorMessage";
 import LoadingSpinner from "../ui/LoadingSpinner";
@@ -62,7 +63,7 @@ const PatronsTable: React.FC<PatronsTableProps> = ({
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
-
+  const navigate = useNavigate();
   return (
     <div className="overflow-x-auto">
       {filteredPatrons.length === 0 && (
@@ -97,8 +98,12 @@ const PatronsTable: React.FC<PatronsTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {filteredPatrons.map((patron, index: number) => (
-            <tr key={patron.id}>
+          {filteredPatrons.map((patron, index) => (
+            <tr
+              key={patron._id}
+              className="cursor-pointer hover:bg-gray-100"
+              onClick={() => navigate(`/patrons/${patron._id}`)}
+            >
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div className="flex items-center">
                   <div className="ml-4">
@@ -119,27 +124,27 @@ const PatronsTable: React.FC<PatronsTableProps> = ({
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div className="text-sm leading-5 text-gray-900">
-                  {patron.admissionNumber}
+                  {patron.admissionNumber || "-"}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div className="text-sm leading-5 text-gray-900">
-                  {patron.class?.name}
+                  {patron.class?.name || "-"}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div className="text-sm leading-5 text-gray-900">
-                  {patron.division?.name}
+                  {patron.division?.name || "-"}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div className="text-sm leading-5 text-gray-900">
-                  {patron.department?.name}
+                  {patron.department?.name || "-"}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div className="text-sm leading-5 text-gray-900">
-                  {patron.section?.name}
+                  {patron.section?.name || "-"}
                 </div>
               </td>
             </tr>

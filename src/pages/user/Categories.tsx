@@ -53,7 +53,7 @@ const CategoriesPage: React.FC = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-gray-100 py-12 flex items-center justify-center">
-        <FeedbackMessage type="error" message={error} />
+        <FeedbackMessage success={false} message={error} />
       </div>
     );
   }

@@ -167,11 +167,11 @@ const LocationsPage: React.FC = () => {
 
         {success && (
           <FeedbackMessage
-            type="success"
+            success={true}
             message="Action completed successfully!"
           />
         )}
-        {error && <FeedbackMessage type="error" message={error} />}
+        {error && <FeedbackMessage success={false} message={error} />}
 
         <LocationModal
           isOpen={isAddModalOpen}

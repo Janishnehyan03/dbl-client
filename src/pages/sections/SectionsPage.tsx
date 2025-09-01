@@ -139,8 +139,8 @@ const SectionsPage: React.FC = () => {
           onEdit={openEditModal}
           onDelete={handleDelete}
         />
-        {error && <FeedbackMessage type="error" message={error || ""} />}
-        {success && <FeedbackMessage type="success" message="Success!" />}
+        {error && <FeedbackMessage success={false} message={error || ""} />}
+        {success && <FeedbackMessage success={true} message="Success!" />}
 
         <SectionModal
           isOpen={isAddModalOpen}

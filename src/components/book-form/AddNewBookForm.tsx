@@ -6,7 +6,7 @@ import { fetchCategories } from "../../utils/services/categoryService";
 import { fetchLanguages } from "../../utils/services/languageService";
 import { fetchLocations } from "../../utils/services/locationService";
 import { fetchPublishers } from "../../utils/services/publisherService";
-import { Author, ICategory } from "../../utils/types";
+import { IAuthor, ICategory } from "../../utils/types";
 import Checkbox from "../ui/CheckBox";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import MultiSelect from "../ui/MultiSelector";
@@ -24,7 +24,7 @@ const AddNewBookForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [authors, setAuthors] = useState<Author[]>([]);
+  const [authors, setAuthors] = useState<IAuthor[]>([]);
   const [publishers, setPublishers] = useState<any[]>([]);
   const [locations, setLocations] = useState<any[]>([]);
   const [languages, setLanguages] = useState<any[]>([]);

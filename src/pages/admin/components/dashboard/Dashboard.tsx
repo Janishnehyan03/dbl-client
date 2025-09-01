@@ -4,10 +4,9 @@ import {
   Calendar,
   Clock,
   DollarSign,
-  Moon,
-  Sun,
-  Users,
+  Users
 } from "lucide-react";
+import moment from "moment";
 import React from "react";
 import Axios from "../../../../utils/Axios";
 import MonthlyStatistics from "./MonthlyStatistics";
@@ -33,11 +32,6 @@ const LibraryDashboard: React.FC = () => {
     });
   }, []);
 
-  const libraryStatus = {
-    isOpen: true,
-    openingHours: "8:00 AM - 6:00 PM",
-  };
-
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Main Content */}
@@ -48,22 +42,16 @@ const LibraryDashboard: React.FC = () => {
             <h1 className="text-3xl font-bold text-gray-900">
               Library Dashboard
             </h1>
-            <p className="text-gray-600 mt-1">
-              Welcome to {libraryStatus.isOpen ? "an open" : "a closed"} library
-              day!
+            <p className="text-gray-600">
+              Welcome to the library management system dashboard.
             </p>
           </div>
           <div className="flex items-center space-x-4">
             <Calendar className="text-gray-600" size={20} />
-            <span className="text-gray-600">March 23, 2025</span>
-            {libraryStatus.isOpen ? (
-              <Sun className="text-yellow-500" size={20} />
-            ) : (
-              <Moon className="text-gray-500" size={20} />
-            )}
-            <span className="text-sm text-gray-600">
-              {libraryStatus.openingHours}
+            <span className="text-gray-600">
+              {moment().format("MMMM Do YYYY")}
             </span>
+           
           </div>
         </div>
 

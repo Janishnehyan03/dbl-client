@@ -10,6 +10,7 @@ import AcademicMangement from "../pages/classes/AcademicManagement";
 import FinesPage from "../pages/fines/FinesPage";
 import LanguagesPage from "../pages/languages/Languages";
 import LocationsPage from "../pages/locations/Locations";
+import PatronDetails from "../pages/patrons/PatronDetails";
 import PatronsPage from "../pages/patrons/PatronsPage";
 import Publishers from "../pages/publishers/Publishers";
 import QuotesPage from "../pages/quotes/Quotes";
@@ -45,6 +46,10 @@ const AdminRoutes = [
   {
     path: "/patrons",
     element: <PatronsPage />,
+  },
+  {
+    path: "/patrons/:id",
+    element: <PatronDetails />,
   },
   {
     path: "/catalog/books",

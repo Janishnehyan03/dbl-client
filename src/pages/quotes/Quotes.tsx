@@ -182,13 +182,13 @@ const QuotesPage: React.FC = () => {
         {/* Feedback Messages */}
         {success && (
           <FeedbackMessage
-            type="success"
+            success={true}
             message="Action completed successfully!"
-            className="mt-4"
+           
           />
         )}
         {error && (
-          <FeedbackMessage type="error" message={error} className="mt-4" />
+          <FeedbackMessage success={false} message={error} />
         )}
       </div>
     </div>

@@ -1,38 +1,34 @@
-import { CheckCircle, AlertCircle, Info } from "lucide-react";
-
-type FeedbackType = "success" | "error" | "info";
+import React from "react";
+import { CheckCircle, AlertCircle } from "lucide-react";
 
 interface FeedbackMessageProps {
-  type: FeedbackType;
-  message: string;
-  className?: string;
+  success: boolean;
+  message: string | null;
 }
 
 const FeedbackMessage: React.FC<FeedbackMessageProps> = ({
-  type,
+  success,
   message,
-  className = "",
 }) => {
-  const baseClasses = "p-4 border-l-4 rounded-lg flex items-center";
-  
-  const typeClasses = {
-    success: "bg-green-50 border-green-500 text-green-700",
-    error: "bg-red-50 border-red-500 text-red-700",
-    info: "bg-blue-50 border-blue-500 text-blue-700",
-  };
+  if (success) {
+    return (
+      <div className="mt-4 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg flex items-center mb-4">
+        <CheckCircle className="text-green-500 mr-3" size={20} />
+        <p className="text-green-700">Action completed successfully!</p>
+      </div>
+    );
+  }
 
-  const icons = {
-    success: <CheckCircle className="mr-3 text-green-500" size={20} />,
-    error: <AlertCircle className="mr-3 text-red-500" size={20} />,
-    info: <Info className="mr-3 text-blue-500" size={20} />,
-  };
+  if (message) {
+    return (
+      <div className="mt-4 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg flex items-center mb-4">
+        <AlertCircle className="text-red-500 mr-3" size={20} />
+        <p className="text-red-700">{message}</p>
+      </div>
+    );
+  }
 
-  return (
-    <div className={`${baseClasses} ${typeClasses[type]} ${className}`}>
-      {icons[type]}
-      <p>{message}</p>
-    </div>
-  );
+  return null;
 };
 
 export default FeedbackMessage;
